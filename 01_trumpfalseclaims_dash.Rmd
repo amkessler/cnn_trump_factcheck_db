@@ -188,6 +188,15 @@ category_tag_PREVWEEK_count <- tag_combined_PREVWEEK %>%
   arrange(desc(n))
 
 
+#subject count - all
+subject_count <- category_tag_count %>% 
+  nrow()
+
+#subject count - previous week only
+subject_count_PREVWEEK <- category_tag_PREVWEEK_count %>% 
+  nrow()
+
+ 
 
 
 
@@ -239,7 +248,7 @@ datatable(fcheck_table,
 
 
 
-Summary Counts (Previous Week) 
+Summary Counts (Previous Week Only) 
 ===================================== 
 Aggregate counts of all Trump false claims made over the **previous seven days**. 
 
@@ -247,7 +256,7 @@ Aggregate counts of all Trump false claims made over the **previous seven days**
 Row {data-height=200}
 -----------------------------------------------------------------------
 
-### Number of false claims
+### Number of false claims this week
 
 ```{r count_total_box}
 
@@ -258,20 +267,23 @@ valueBox(tot, icon = "fa-pencil", color = "lightblue")
 
 ```
 
-### Top forum type
+### Number of forum types this week
 
 ```{r}
 
-valueBox(top_prevweek_forum_kind, icon = "fa-users", color = "#A8E9A8")
+num_forums <- count_prevweek_forum_kind %>% 
+  nrow()
+
+valueBox(num_forums, icon = "fa-users", color = "#A8E9A8")
 
 
 ```
 
-### Number of forums
+### Number of subjects this week (*a claim can have multiple subjects*)
 
 ```{r}
 
-valueBox(top_prevweek_forum, icon = "fa-book", color = "#f4a8a7")
+valueBox(subject_count_PREVWEEK, icon = "fa-book", color = "#f4a8a7")
 
 
 
@@ -283,7 +295,7 @@ Row {data-height=800}
 -----------------------------------------------------------------------
 
 
-### Daily totals
+### Top daily totals
 
 ```{r}
 
@@ -317,7 +329,7 @@ dd_nomenu
 ```
 
 
-### By forum type
+### Top forum types
 
 ```{r}
 
@@ -350,17 +362,15 @@ ee_nomenu
 ```
 
 
-### By forum
+### Top subjects
 
 ```{r}
 
-byforum <- fcheck_PREVWEEK %>% 
-  count(forum) %>% 
-  arrange(desc(n)) %>% 
+bysubject <- category_tag_PREVWEEK_count %>% 
   head()
 
 
-e <- ggplot(data = byforum, aes(x = reorder(forum, -n), y = n)) +
+e <- ggplot(data = bysubject, aes(x = reorder(tag, -n), y = n)) +
   geom_col(
     # color = "#848484",
     fill = "#f4a8a7") +
