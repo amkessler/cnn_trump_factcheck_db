@@ -53,6 +53,18 @@ fcheck %>%
   count(date)
 
 
+fcheck %>% 
+  count(kind_of_forum) %>% 
+  arrange(desc(n)) %>% 
+  head(1) %>% 
+  select(kind_of_forum) %>% 
+  pull()
+
+
+fcheck %>% 
+  count(kind_of_forum) %>% 
+  arrange(desc(n))
+
 # EXPLORATORY ANALYSIS #### ---------------------------------
 
 names(fcheck)
