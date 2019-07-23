@@ -179,8 +179,8 @@ datatable(fcheck_table,
           filter = "top",
           escape = FALSE,
           options = list(searchHighlight = TRUE)) %>% 
-  formatDate('date', 'toDateString')  
-  # formatStyle('candidate', fontWeight = 'bold')
+  formatDate('date', 'toDateString') %>% 
+  formatStyle('claim', fontStyle = 'italic')
 
 
 ```

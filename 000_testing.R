@@ -86,9 +86,12 @@ fcheck %>%
   count(category_tag1) %>% 
   arrange(desc(n)) 
 
-fcheck %>% 
-  count(spectrum_of_truth, candidate) %>% 
-  arrange(spectrum_of_truth, desc(n)) 
+
+
+### trying to count up subject categories stretching across multiple columns ####
+
+
+
 
 
 # 
