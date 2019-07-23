@@ -66,6 +66,9 @@ fcheck <- fcheck %>%
     location = as.factor(location)
   )
 
+# remove NAs from link column 
+fcheck$source_article <- fcheck$source_article %>% replace_na("")
+
 #convert link to html hyperlink format
 fcheck$source_article <- paste0("<a href='", fcheck$source_article, "' target='_blank'>", fcheck$source_article, "</a>")
 
@@ -89,7 +92,7 @@ d <- Sys.Date()
 # d <- .POSIXct(d, "EST")
   
 t <- Sys.time()
-t <- .POSIXct(t, "EDT")
+t <- .POSIXct(t, "EST")
 
 ```
 
@@ -131,145 +134,145 @@ datatable(fcheck_table,
 ```
 
 
-Summary Counts (CNN Only)
-=====================================
+<!-- Summary Counts  -->
+<!-- ===================================== -->
 
 
-Row {data-height=200}
------------------------------------------------------------------------
-
-### Total CNN Fact Checks
-
-```{r}
-
-tot <- nrow(fcheck)
-
-valueBox(tot, icon = "fa-pencil", color = "lightblue")
-
-
-```
-
-### Total candidates included
-
-```{r}
-
-valueBox(cands_included, icon = "fa-users", color = "#A8E9A8")
-
-
-```
-
-### Total number of subjects
-
-```{r}
-
-valueBox(subjects_included, icon = "fa-book", color = "#f4a8a7")
-
-
-```
-
-
-Row {data-height=800}
------------------------------------------------------------------------
-
-
-### Totals by truth spectrum
-
-```{r}
-
-byspectrum <- fcheck %>% 
-  count(spectrum_of_truth) 
-
-
-d <- ggplot(data = byspectrum, aes(x = reorder(spectrum_of_truth, -n), y = n)) +
-  geom_col(
-    # color = "#848484",
-    fill = "lightblue") +
-  # coord_flip() +
-  theme_minimal()
-
-d2 <- d + labs(x ="", y = "") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  # scale_fill_manual(values=cbPalette) +
-  theme(legend.title=element_blank()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-dd <- ggplotly(d2)
-
-dd_nomenu <- dd %>% config(displayModeBar = FALSE)
-dd_nomenu
-
-# ggplot(corr.m, aes(x = reorder(miRNA, -value), y = value, fill = variable)) + 
-#   geom_bar(stat = "identity")
-
-```
-
-
-### Candidates with most fact checks
-
-```{r}
-
-bycand <- fcheck %>% 
-  count(candidate) %>% 
-  arrange(desc(n)) %>% 
-  head() %>% 
-  ungroup()
-
-
-e <- ggplot(data = bycand, aes(x = reorder(candidate, -n), y = n)) +
-  geom_col(
-    # color = "#848484",
-    fill = "#A8E9A8") +
-  # coord_flip() +
-  theme_minimal()
-
-e2 <- e + labs(x ="", y = "") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  # scale_fill_manual(values=cbPalette) +
-  theme(legend.title=element_blank()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-ee <- ggplotly(e2)
-
-ee_nomenu <- ee %>% config(displayModeBar = FALSE)
-ee_nomenu
-
-
-```
-
-
-<!-- Row  -->
+<!-- Row {data-height=200} -->
 <!-- ----------------------------------------------------------------------- -->
 
-### Most common subjects
+<!-- ### Total CNN Fact Checks -->
 
-```{r}
+<!-- ```{r} -->
 
-bysubject <- fcheck %>% 
-  count(subject) %>% 
-  arrange(desc(n)) %>% 
-  head() %>% 
-  ungroup()
+<!-- tot <- nrow(fcheck) -->
+
+<!-- valueBox(tot, icon = "fa-pencil", color = "lightblue") -->
 
 
-e <- ggplot(data = bysubject, aes(x = reorder(subject, -n), y = n)) +
-  geom_col(
-    # color = "#848484",
-    fill = "#f4a8a7") +
-  # coord_flip() +
-  theme_minimal()
+<!-- ``` -->
 
-e2 <- e + labs(x ="", y = "") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  # scale_fill_manual(values=cbPalette) +
-  theme(legend.title=element_blank()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+<!-- ### Total candidates included -->
 
-ee <- ggplotly(e2)
+<!-- ```{r} -->
 
-ee_nomenu <- ee %>% config(displayModeBar = FALSE)
-ee_nomenu
+<!-- valueBox(cands_included, icon = "fa-users", color = "#A8E9A8") -->
 
 
-```
+<!-- ``` -->
+
+<!-- ### Total number of subjects -->
+
+<!-- ```{r} -->
+
+<!-- valueBox(subjects_included, icon = "fa-book", color = "#f4a8a7") -->
+
+
+<!-- ``` -->
+
+
+<!-- Row {data-height=800} -->
+<!-- ----------------------------------------------------------------------- -->
+
+
+<!-- ### Totals by truth spectrum -->
+
+<!-- ```{r} -->
+
+<!-- byspectrum <- fcheck %>%  -->
+<!--   count(spectrum_of_truth)  -->
+
+
+<!-- d <- ggplot(data = byspectrum, aes(x = reorder(spectrum_of_truth, -n), y = n)) + -->
+<!--   geom_col( -->
+<!--     # color = "#848484", -->
+<!--     fill = "lightblue") + -->
+<!--   # coord_flip() + -->
+<!--   theme_minimal() -->
+
+<!-- d2 <- d + labs(x ="", y = "") + -->
+<!--   theme(plot.title = element_text(hjust = 0.5)) + -->
+<!--   # scale_fill_manual(values=cbPalette) + -->
+<!--   theme(legend.title=element_blank()) + -->
+<!--   theme(axis.text.x = element_text(angle = 45, hjust = 1)) -->
+
+<!-- dd <- ggplotly(d2) -->
+
+<!-- dd_nomenu <- dd %>% config(displayModeBar = FALSE) -->
+<!-- dd_nomenu -->
+
+<!-- # ggplot(corr.m, aes(x = reorder(miRNA, -value), y = value, fill = variable)) +  -->
+<!-- #   geom_bar(stat = "identity") -->
+
+<!-- ``` -->
+
+
+<!-- ### Candidates with most fact checks -->
+
+<!-- ```{r} -->
+
+<!-- bycand <- fcheck %>%  -->
+<!--   count(candidate) %>%  -->
+<!--   arrange(desc(n)) %>%  -->
+<!--   head() %>%  -->
+<!--   ungroup() -->
+
+
+<!-- e <- ggplot(data = bycand, aes(x = reorder(candidate, -n), y = n)) + -->
+<!--   geom_col( -->
+<!--     # color = "#848484", -->
+<!--     fill = "#A8E9A8") + -->
+<!--   # coord_flip() + -->
+<!--   theme_minimal() -->
+
+<!-- e2 <- e + labs(x ="", y = "") + -->
+<!--   theme(plot.title = element_text(hjust = 0.5)) + -->
+<!--   # scale_fill_manual(values=cbPalette) + -->
+<!--   theme(legend.title=element_blank()) + -->
+<!--   theme(axis.text.x = element_text(angle = 45, hjust = 1)) -->
+
+<!-- ee <- ggplotly(e2) -->
+
+<!-- ee_nomenu <- ee %>% config(displayModeBar = FALSE) -->
+<!-- ee_nomenu -->
+
+
+<!-- ``` -->
+
+
+<!-- <!-- Row  --> -->
+<!-- <!-- ----------------------------------------------------------------------- --> -->
+
+<!-- ### Most common subjects -->
+
+<!-- ```{r} -->
+
+<!-- bysubject <- fcheck %>%  -->
+<!--   count(subject) %>%  -->
+<!--   arrange(desc(n)) %>%  -->
+<!--   head() %>%  -->
+<!--   ungroup() -->
+
+
+<!-- e <- ggplot(data = bysubject, aes(x = reorder(subject, -n), y = n)) + -->
+<!--   geom_col( -->
+<!--     # color = "#848484", -->
+<!--     fill = "#f4a8a7") + -->
+<!--   # coord_flip() + -->
+<!--   theme_minimal() -->
+
+<!-- e2 <- e + labs(x ="", y = "") + -->
+<!--   theme(plot.title = element_text(hjust = 0.5)) + -->
+<!--   # scale_fill_manual(values=cbPalette) + -->
+<!--   theme(legend.title=element_blank()) + -->
+<!--   theme(axis.text.x = element_text(angle = 45, hjust = 1)) -->
+
+<!-- ee <- ggplotly(e2) -->
+
+<!-- ee_nomenu <- ee %>% config(displayModeBar = FALSE) -->
+<!-- ee_nomenu -->
+
+
+<!-- ``` -->
 
 
