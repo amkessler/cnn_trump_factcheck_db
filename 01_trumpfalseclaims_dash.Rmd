@@ -138,6 +138,58 @@ top_prevweek_forum <- fcheck_PREVWEEK %>%
 
 
 
+### count up subject categories stretching across four data columns #### --------------------
+tag1 <- fcheck %>% 
+  select(tag = category_tag1)
+
+tag2 <- fcheck %>% 
+  select(tag = category_tag2)
+
+tag3 <- fcheck %>% 
+  select(tag = category_tag3)
+
+tag4 <- fcheck %>% 
+  select(tag = category_tag4)
+
+#combine into one
+tag_combined <- bind_rows(tag1, tag2, tag3, tag4)
+
+#filter out NAs
+tag_combined <- tag_combined %>% 
+  filter(!is.na(tag))
+
+category_tag_count <- tag_combined %>% 
+  count(tag) %>% 
+  arrange(desc(n))
+
+
+### Now the same for PREV WEEK ONLY
+tag1b <- fcheck_PREVWEEK %>% 
+  select(tag = category_tag1)
+
+tag2b <- fcheck_PREVWEEK %>% 
+  select(tag = category_tag2)
+
+tag3b <- fcheck_PREVWEEK %>% 
+  select(tag = category_tag3)
+
+tag4b <- fcheck_PREVWEEK %>% 
+  select(tag = category_tag4)
+
+#combine into one
+tag_combined <- bind_rows(tag1b, tag2b, tag3b, tag4b)
+
+#filter out NAs
+tag_combined_PREVWEEK <- tag_combined %>% 
+  filter(!is.na(tag))
+
+category_tag_PREVWEEK_count <- tag_combined_PREVWEEK %>% 
+  count(tag) %>% 
+  arrange(desc(n))
+
+
+
+
 
 # set time object set to eastern time
 d <- Sys.Date()

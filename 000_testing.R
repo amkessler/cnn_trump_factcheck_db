@@ -43,8 +43,7 @@ saveRDS(fcheck, "saved_versions/fcheck_saved.rds")
 
 fcheck
 
-t <- events %>%
-  filter(date > today("EST"))
+
 
 
 fcheck %>%
@@ -88,10 +87,29 @@ fcheck %>%
 
 
 
-### trying to count up subject categories stretching across multiple columns ####
+### count up subject categories stretching across four data columns ####
+tag1 <- fcheck %>% 
+  select(tag = category_tag1)
 
+tag2 <- fcheck %>% 
+  select(tag = category_tag2)
 
+tag3 <- fcheck %>% 
+  select(tag = category_tag3)
 
+tag4 <- fcheck %>% 
+  select(tag = category_tag4)
+
+#combine into one
+tag_combined <- bind_rows(tag1, tag2, tag3, tag4)
+
+#filter out NAs
+tag_combined <- tag_combined %>% 
+  filter(!is.na(tag))
+
+category_tag_count <- tag_combined %>% 
+  count(tag) %>% 
+  arrange(desc(n))
 
 
 # 
