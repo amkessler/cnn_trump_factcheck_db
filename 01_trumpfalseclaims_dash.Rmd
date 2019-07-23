@@ -72,6 +72,12 @@ fcheck$source_article <- fcheck$source_article %>% replace_na("")
 #convert link to html hyperlink format
 fcheck$source_article <- paste0("<a href='", fcheck$source_article, "' target='_blank'>", fcheck$source_article, "</a>")
 
+#create table of JUST THE PREVIOUS WEEK's checks
+fcheck_PREVWEEK <- fcheck %>%
+  filter(date <= today("EST"),
+         date >= today("EST")-7)
+
+
 
 # COUNTS ####
 
@@ -79,10 +85,18 @@ fcheck$source_article <- paste0("<a href='", fcheck$source_article, "' target='_
 count_total <- fcheck %>% 
   nrow()
 
+#total count this week only
+count_prevweek_total <- fcheck_PREVWEEK %>% 
+  nrow()
+
+
 #kind of forum count
 count_forum_kind <- fcheck %>% 
-  count(kind_of_forum) %>% 
-  nrow()
+  count(kind_of_forum) 
+
+#kind of forum count - previous week only
+count_prevweek_forum_kind <- fcheck_PREVWEEK %>% 
+  count(kind_of_forum) 
 
 
 

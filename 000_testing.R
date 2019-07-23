@@ -41,6 +41,17 @@ fcheck <- fcheck %>%
 #save version to file for later use
 saveRDS(fcheck, "saved_versions/fcheck_saved.rds")
 
+fcheck
+
+t <- events %>%
+  filter(date > today("EST"))
+
+
+fcheck %>%
+  filter(date <= today("EST"),
+         date >= today("EST")-7) %>% 
+  count(date)
+
 
 # EXPLORATORY ANALYSIS #### ---------------------------------
 
