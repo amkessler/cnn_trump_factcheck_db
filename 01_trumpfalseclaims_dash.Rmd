@@ -79,7 +79,7 @@ fcheck_PREVWEEK <- fcheck %>%
 
 
 
-# COUNTS ####
+# COUNTS #### ----------------------------------
 
 #total count
 count_total <- fcheck %>% 
@@ -288,5 +288,64 @@ datatable(fcheck_table,
 
 
 <!-- ``` -->
+
+
+
+Summary Counts (Previous Week) 
+===================================== 
+Aggregate counts of all Trump false claims made over the **previous seven days**. 
+
+
+
+
+Row {data-height=200}
+-----------------------------------------------------------------------
+
+### Number of false claims
+
+```{r count_total_box}
+
+tot <- count_prevweek_total
+
+valueBox(tot, icon = "fa-pencil", color = "lightblue")
+
+
+```
+
+### Top forum type
+
+```{r}
+
+valueBox(cands_included, icon = "fa-users", color = "#A8E9A8")
+
+
+```
+
+### Top subject category 
+
+```{r}
+
+# valueBox(subjects_included, icon = "fa-book", color = "#f4a8a7")
+TBD
+
+```
+
+
+
+Row 
+-----------------------------------------------------------------------
+
+
+
+```{r }
+
+kable(count_prevweek_total) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+
+
+```
+
+
 
 
