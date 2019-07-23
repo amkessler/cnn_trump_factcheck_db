@@ -1,0 +1,275 @@
+---
+title: "Trump False Claims Data"
+# resource_files:
+# - .httr-oauth
+output:
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+    theme: cerulean
+---
+
+```{r setup, include=FALSE}
+
+library(flexdashboard)
+library(tidyverse)
+library(lubridate)
+library(janitor)
+library(glue)
+library(plotly)
+library(DT)
+library(googlesheets)
+library(kableExtra)
+library(leaflet)
+# library(ggmap)
+library(RColorBrewer)
+library(htmlwidgets)
+library(htmltools)
+library(tigris)
+options(tigris_class = "sf")
+library(readxl)
+
+
+raw_data <- read_excel("TRUMP FACT-CHECKS.xlsx", 
+                                sheet = "ak", col_types = c("date", "text", 
+                                                            "text", "text", "text", "text", "text", 
+                                                            "text", "text", "text", "numeric", 
+                                                            "text"))
+
+
+glimpse(raw_data)
+
+#clean column names
+fcheck <- raw_data %>% 
+  clean_names() 
+
+names(fcheck)
+
+#set formatting of certain columns and break out dates into own columns
+fcheck <- fcheck %>% 
+  mutate(
+    kind_of_forum = str_trim(str_to_upper(kind_of_forum)),
+    location = str_trim(str_to_upper(location)),
+    category_tag1 = str_trim(str_to_upper(category_tag1)),
+    category_tag2 = str_trim(str_to_upper(category_tag2)),
+    category_tag3 = str_trim(str_to_upper(category_tag3)),
+    category_tag4 = str_trim(str_to_upper(category_tag4)),
+    year = year(date),
+    month = month(date),
+    day = day(date),
+    week = week(date)
+  )
+
+fcheck <- fcheck %>% 
+  mutate(
+    kind_of_forum = as.factor(kind_of_forum),
+    location = as.factor(location)
+  )
+
+#convert link to html hyperlink format
+fcheck$source_article <- paste0("<a href='", fcheck$source_article, "' target='_blank'>", fcheck$source_article, "</a>")
+
+
+# COUNTS ####
+
+#total count
+count_total <- fcheck %>% 
+  nrow()
+
+#kind of forum count
+count_forum_kind <- fcheck %>% 
+  count(kind_of_forum) %>% 
+  nrow()
+
+
+
+
+# set time object set to eastern time
+d <- Sys.Date()
+# d <- .POSIXct(d, "EST")
+  
+t <- Sys.time()
+t <- .POSIXct(t, "EDT")
+
+```
+
+
+Searchable Database 
+===================================== 
+Trump false claim fact checks through `r format(d, format="%b %d")`. To filter the list, click on the boxes above the columns. To sort, click on the arrows by the column names. To search globally by keywords, use the search box on the right. 
+(Last updated on `r format(t, format="%B %d %I:%M %p %Z")`)
+
+
+Row 
+-----------------------------------------------------------------------
+
+### {data-width=800}
+
+```{r searchable_table}
+
+#searchable table
+
+fcheck_table <- fcheck %>% 
+  select(date,
+         kind_of_forum,
+         forum,
+         location,
+         claim,
+         fact_check,
+         source_article
+)
+
+datatable(fcheck_table, 
+          rownames = FALSE, 
+          filter = "top",
+          escape = FALSE,
+          options = list(searchHighlight = TRUE)) %>% 
+  formatDate('date', 'toDateString')  
+  # formatStyle('candidate', fontWeight = 'bold')
+
+
+```
+
+
+Summary Counts (CNN Only)
+=====================================
+
+
+Row {data-height=200}
+-----------------------------------------------------------------------
+
+### Total CNN Fact Checks
+
+```{r}
+
+tot <- nrow(fcheck)
+
+valueBox(tot, icon = "fa-pencil", color = "lightblue")
+
+
+```
+
+### Total candidates included
+
+```{r}
+
+valueBox(cands_included, icon = "fa-users", color = "#A8E9A8")
+
+
+```
+
+### Total number of subjects
+
+```{r}
+
+valueBox(subjects_included, icon = "fa-book", color = "#f4a8a7")
+
+
+```
+
+
+Row {data-height=800}
+-----------------------------------------------------------------------
+
+
+### Totals by truth spectrum
+
+```{r}
+
+byspectrum <- fcheck %>% 
+  count(spectrum_of_truth) 
+
+
+d <- ggplot(data = byspectrum, aes(x = reorder(spectrum_of_truth, -n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "lightblue") +
+  # coord_flip() +
+  theme_minimal()
+
+d2 <- d + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+dd <- ggplotly(d2)
+
+dd_nomenu <- dd %>% config(displayModeBar = FALSE)
+dd_nomenu
+
+# ggplot(corr.m, aes(x = reorder(miRNA, -value), y = value, fill = variable)) + 
+#   geom_bar(stat = "identity")
+
+```
+
+
+### Candidates with most fact checks
+
+```{r}
+
+bycand <- fcheck %>% 
+  count(candidate) %>% 
+  arrange(desc(n)) %>% 
+  head() %>% 
+  ungroup()
+
+
+e <- ggplot(data = bycand, aes(x = reorder(candidate, -n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "#A8E9A8") +
+  # coord_flip() +
+  theme_minimal()
+
+e2 <- e + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ee <- ggplotly(e2)
+
+ee_nomenu <- ee %>% config(displayModeBar = FALSE)
+ee_nomenu
+
+
+```
+
+
+<!-- Row  -->
+<!-- ----------------------------------------------------------------------- -->
+
+### Most common subjects
+
+```{r}
+
+bysubject <- fcheck %>% 
+  count(subject) %>% 
+  arrange(desc(n)) %>% 
+  head() %>% 
+  ungroup()
+
+
+e <- ggplot(data = bysubject, aes(x = reorder(subject, -n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "#f4a8a7") +
+  # coord_flip() +
+  theme_minimal()
+
+e2 <- e + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ee <- ggplotly(e2)
+
+ee_nomenu <- ee %>% config(displayModeBar = FALSE)
+ee_nomenu
+
+
+```
+
+
