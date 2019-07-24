@@ -233,7 +233,8 @@ fcheck_table <- fcheck %>%
          claim,
          fact_check,
          source_article
-)
+) %>% 
+  arrange(desc(date))
 
 datatable(fcheck_table, 
           rownames = FALSE, 
@@ -248,7 +249,7 @@ datatable(fcheck_table,
 
 
 
-Summary Counts (Previous WeeK) 
+Summary Counts (Previous Week) 
 ===================================== 
 Aggregate counts of all Trump false claims made over the **previous seven days**. 
 
@@ -258,7 +259,7 @@ Row {data-height=200}
 
 ### Number of false claims this week
 
-```{r count_total_box}
+```{r }
 
 tot <- count_prevweek_total
 
@@ -392,6 +393,151 @@ ee_nomenu
 ```
 
 
+
+
+
+Summary Counts (All) 
+===================================== 
+Aggregate counts of *all* Trump false claims compiled by CNN 
+
+
+Row {data-height=200}
+-----------------------------------------------------------------------
+
+### Number of all false claims 
+
+```{r count_total_box}
+
+tot <- count_total
+
+valueBox(tot, icon = "fa-pencil", color = "lightblue")
+
+
+```
+
+### Number of all forum types
+
+```{r}
+
+num_forums <- count_forum_kind %>% 
+  nrow()
+
+valueBox(num_forums, icon = "fa-users", color = "#A8E9A8")
+
+
+```
+
+### Number of all subjects 
+
+```{r}
+
+valueBox(subject_count, icon = "fa-book", color = "#f4a8a7")
+
+
+
+```
+
+
+
+Row {data-height=800}
+-----------------------------------------------------------------------
+
+
+### Top daily totals
+
+```{r}
+
+bydate <- fcheck %>%
+  count(date) %>% 
+  head() %>% 
+  ungroup() 
+
+
+d <- ggplot(data = bydate, aes(x = reorder(date, -n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "lightblue") +
+  # coord_flip() +
+  theme_minimal()
+
+d2 <- d + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+dd <- ggplotly(d2)
+
+dd_nomenu <- dd %>% config(displayModeBar = FALSE)
+dd_nomenu
+
+# ggplot(corr.m, aes(x = reorder(miRNA, -value), y = value, fill = variable)) +
+#   geom_bar(stat = "identity")
+
+```
+
+
+### Top forum types
+
+```{r}
+
+byforumtype <- fcheck %>%
+  count(kind_of_forum) %>%
+  arrange(desc(n)) %>%
+  head() %>%
+  ungroup()
+
+
+e <- ggplot(data = byforumtype, aes(x = reorder(kind_of_forum, -n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "#A8E9A8") +
+  # coord_flip() +
+  theme_minimal()
+
+e2 <- e + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ee <- ggplotly(e2)
+
+ee_nomenu <- ee %>% config(displayModeBar = FALSE)
+ee_nomenu
+
+
+```
+
+
+### Top subjects
+
+```{r}
+
+bysubject <- category_tag_count %>% 
+  head()
+
+
+e <- ggplot(data = bysubject, aes(x = reorder(tag, -n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "#f4a8a7") +
+  # coord_flip() +
+  theme_minimal()
+
+e2 <- e + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ee <- ggplotly(e2)
+
+ee_nomenu <- ee %>% config(displayModeBar = FALSE)
+ee_nomenu
+
+
+```
 
 
 
