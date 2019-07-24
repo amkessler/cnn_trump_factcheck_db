@@ -6,7 +6,7 @@ output:
   flexdashboard::flex_dashboard:
     orientation: rows
     vertical_layout: fill
-    # theme: cerulean
+    # theme: yeti
 ---
 
 ```{r setup, include=FALSE}
@@ -248,7 +248,7 @@ datatable(fcheck_table,
 
 
 
-Summary Counts (Previous Week Only) 
+Summary Counts (Previous WeeK) 
 ===================================== 
 Aggregate counts of all Trump false claims made over the **previous seven days**. 
 
@@ -279,7 +279,7 @@ valueBox(num_forums, icon = "fa-users", color = "#A8E9A8")
 
 ```
 
-### Number of subjects this week (*a claim can have multiple subjects*)
+### Number of subjects this week 
 
 ```{r}
 
