@@ -9,7 +9,6 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-library(flexdashboard)
 library(tidyverse)
 library(lubridate)
 library(janitor)
@@ -75,67 +74,6 @@ fcheck_PREVWEEK <- fcheck %>%
   filter(date <= today("EST"),
          date >= today("EST")-7)
 
-
-
-# COUNTS #### ----------------------------------
-
-#total count
-count_total <- fcheck %>% 
-  nrow()
-
-#total count - previous week only
-count_prevweek_total <- fcheck_PREVWEEK %>% 
-  nrow()
-
-
-#kind of forum count
-count_forum_kind <- fcheck %>% 
-  count(kind_of_forum) 
-
-#kind of forum count - previous week only
-count_prevweek_forum_kind <- fcheck_PREVWEEK %>% 
-  count(kind_of_forum) 
-
-
-#top kind of forum 
-top_forum_kind <- fcheck %>% 
-  count(kind_of_forum) %>% 
-  arrange(desc(n)) %>% 
-  head(1) %>% 
-  select(kind_of_forum) %>% 
-  pull() %>% 
-  str_to_title()
-
-#top kind of forum - previous week only
-top_prevweek_forum_kind <- fcheck_PREVWEEK %>% 
-  count(kind_of_forum) %>% 
-  arrange(desc(n)) %>% 
-  head(1) %>% 
-  select(kind_of_forum) %>% 
-  pull() %>% 
-  str_to_title()
-
-
-#top forum 
-top_forum <- fcheck %>% 
-  count(forum) %>% 
-  arrange(desc(n)) %>% 
-  head(1) %>% 
-  select(forum) %>% 
-  pull() %>% 
-  str_to_title()
-
-#top forum - previous week only
-top_prevweek_forum <- fcheck_PREVWEEK %>% 
-  count(forum) %>% 
-  arrange(desc(n)) %>% 
-  head(1) %>% 
-  select(forum) %>% 
-  pull() %>% 
-  str_to_title()
-
-
-
 ### count up subject categories stretching across four data columns #### --------------------
 tag1 <- fcheck %>% 
   select(tag = category_tag1)
@@ -186,13 +124,13 @@ category_tag_PREVWEEK_count <- tag_combined_PREVWEEK %>%
   arrange(desc(n))
 
 
-#subject count - all
-subject_count <- category_tag_count %>% 
-  nrow()
-
-#subject count - previous week only
-subject_count_PREVWEEK <- category_tag_PREVWEEK_count %>% 
-  nrow()
+# #subject count - all
+# subject_count <- category_tag_count %>% 
+#   nrow()
+# 
+# #subject count - previous week only
+# subject_count_PREVWEEK <- category_tag_PREVWEEK_count %>% 
+#   nrow()
 
  
 # set time object set to eastern time
@@ -207,106 +145,30 @@ t <- .POSIXct(t, "EST")
 
 The latest full spreadsheet with all the raw entries can be downloaded [HERE](https://www.cnn.com)
 
-Summary breakdowns below as of `r format(Sys.time(), "%a %b %d %X")` 
+Summary breakdowns below as of `r format(Sys.time(), "%a %b %d %X")`
 
 
 
-### Topline Totals *To Date*
+Topline Totals To Date
 
-Total Trump false claims: `r fcheck %>% nrow()`
+<!-- Total Trump false claims: `r nrow(fcheck)` -->
 
-Number of forum types: `r fcheck %>% count(kind_of_forum)`
+<!-- Number of forum types: `r fcheck %>% count(kind_of_forum) %>% pull()` -->
 
-Top forum type: `r fcheck %>% count(kind_of_forum) %>% arrange(desc(n)) %>% head(1) %>% select(kind_of_forum) %>% pull() %>% str_to_title()`
+<!-- Top forum type: `r fcheck %>% count(kind_of_forum) %>% arrange(desc(n)) %>% head(1) %>% select(kind_of_forum) %>% pull() %>% str_to_title()` -->
 
-Top individual forum: `r fcheck %>% count(forum) %>% arrange(desc(n)) %>% head(1) %>% select(kind_of_forum) %>% pull() %>% str_to_title()`
+<!-- Top individual forum: `r fcheck %>% count(forum) %>% arrange(desc(n)) %>% head(1) %>% select(kind_of_forum) %>% pull() %>% str_to_title()` -->
 
-Top 5 Subject Categories 
+<!-- Top Subject Categories -->
+
 ```{r echo=FALSE}
+
 category_tag_count %>%
-  head(5) %>%
+    head() %>%
     kable() %>%
     kable_styling(bootstrap_options = c("striped", "condensed"),
                 full_width = F,
                 position = "left")
 
 ```
-
-
-
-<!-- ```{r} -->
-
-
-
-<!-- fcheck %>%  -->
-<!--   filter(!is.na(keyrace_rating)) %>%  -->
-<!--   count(current_party, live_winning) %>%  -->
-<!--     kable() %>%  -->
-<!--     kable_styling(bootstrap_options = c("striped", "condensed"),  -->
-<!--                 full_width = F, -->
-<!--                 position = "left") -->
-
-
-<!-- #total count -->
-<!-- count_total <- fcheck %>% -->
-<!--   nrow() -->
-
-<!-- #total count - previous week only -->
-<!-- count_prevweek_total <- fcheck_PREVWEEK %>% -->
-<!--   nrow() -->
-
-
-<!-- #kind of forum count -->
-<!-- count_forum_kind <- fcheck %>% -->
-<!--   count(kind_of_forum) -->
-
-<!-- #kind of forum count - previous week only -->
-<!-- count_prevweek_forum_kind <- fcheck_PREVWEEK %>% -->
-<!--   count(kind_of_forum) -->
-
-
-<!-- #top kind of forum -->
-<!-- top_forum_kind <- fcheck %>% -->
-<!--   count(kind_of_forum) %>% -->
-<!--   arrange(desc(n)) %>% -->
-<!--   head(1) %>% -->
-<!--   select(kind_of_forum) %>% -->
-<!--   pull() %>% -->
-<!--   str_to_title() -->
-
-<!-- #top kind of forum - previous week only -->
-<!-- top_prevweek_forum_kind <- fcheck_PREVWEEK %>% -->
-<!--   count(kind_of_forum) %>% -->
-<!--   arrange(desc(n)) %>% -->
-<!--   head(1) %>% -->
-<!--   select(kind_of_forum) %>% -->
-<!--   pull() %>% -->
-<!--   str_to_title() -->
-
-
-<!-- #top forum -->
-<!-- top_forum <- fcheck %>% -->
-<!--   count(forum) %>% -->
-<!--   arrange(desc(n)) %>% -->
-<!--   head(1) %>% -->
-<!--   select(forum) %>% -->
-<!--   pull() %>% -->
-<!--   str_to_title() -->
-
-<!-- #top forum - previous week only -->
-<!-- top_prevweek_forum <- fcheck_PREVWEEK %>% -->
-<!--   count(forum) %>% -->
-<!--   arrange(desc(n)) %>% -->
-<!--   head(1) %>% -->
-<!--   select(forum) %>% -->
-<!--   pull() %>% -->
-<!--   str_to_title() -->
-
-
-
-
-<!-- ``` -->
-
-
-
 

@@ -209,6 +209,45 @@ t <- .POSIXct(t, "EST")
 ```
 
 
+
+
+Test Report Page 
+===================================== 
+
+### Top Tagged Subjects
+```{r echo=FALSE}
+
+category_tag_count %>%
+    head() %>%
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"),
+                full_width = F,
+                position = "left")
+
+```
+
+
+<!-- ###Total Trump false claims -->
+
+<!-- ```{r} -->
+
+<!-- fcheck -->
+
+<!-- ``` -->
+
+
+
+
+<!-- Number of forum types: `r fcheck %>% count(kind_of_forum) %>% pull()` -->
+
+<!-- Top forum type: `r fcheck %>% count(kind_of_forum) %>% arrange(desc(n)) %>% head(1) %>% select(kind_of_forum) %>% pull() %>% str_to_title()` -->
+
+<!-- Top individual forum: `r fcheck %>% count(forum) %>% arrange(desc(n)) %>% head(1) %>% select(kind_of_forum) %>% pull() %>% str_to_title()` -->
+
+
+
+
+
 Summary Counts (Previous Week) 
 ===================================== 
 Aggregate counts of all Trump false claims made over the **previous seven days**. 
