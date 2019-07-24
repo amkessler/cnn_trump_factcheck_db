@@ -78,6 +78,8 @@ fcheck %>%
 
 
 # weekly/daily rankings #### ---------
+# let's try to rank them 
+# using dense_rank() which doesn't skip numbers and uses ties (there's also min_rank which skips after a tie)
 
 # group by date
 fcheck %>% 
@@ -91,8 +93,8 @@ fcheck %>%
   arrange(desc(n)) %>% 
   mutate(rank = dense_rank(n))
 
-# let's try to rank them now
-# using dense_rank() which doesn't skip numbers and uses ties (there's also min_rank which skips after a tie)
+# now let's try to pull what the current day/week is rank-wise (e.g. "this is the 5th worst week for falsehoods")
+
 
 
 
