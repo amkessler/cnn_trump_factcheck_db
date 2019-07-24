@@ -199,9 +199,6 @@ subject_count_PREVWEEK <- category_tag_PREVWEEK_count %>%
   nrow()
 
  
-
-
-
 # set time object set to eastern time
 d <- Sys.Date()
 # d <- .POSIXct(d, "EST")
