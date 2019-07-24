@@ -34,9 +34,31 @@ fcheck <- fcheck %>%
     category_tag4 = str_trim(str_to_upper(category_tag4)),
     year = year(date),
     month = month(date),
-    day = day(date)
+    day = day(date),
+    day_of_week = weekdays(date, abbreviate = T),
+    week = week(date),
+    isoweek = isoweek(date)
   )
 
+#does isoweek() start on Monday instead?
+# https://rdrr.io/cran/lubridate/man/week.html
+
+#test with testing file 
+date_test <- read_excel("date_test.xlsx", 
+                        col_types = c("date"))
+
+
+date_test <- date_test %>% 
+  mutate(
+    year = year(date),
+    month = month(date),
+    day = day(date),
+    day_of_week = weekdays(date, abbreviate = T),
+    week = week(date),
+    isoweek = isoweek(date)
+  )
+
+#looks like it works!
 
 #save version to file for later use
 saveRDS(fcheck, "saved_versions/fcheck_saved.rds")
@@ -44,13 +66,34 @@ saveRDS(fcheck, "saved_versions/fcheck_saved.rds")
 fcheck
 
 
-
-
+#pulling last week only? ####
 fcheck %>%
   filter(date <= today("EST"),
          date >= today("EST")-7) %>% 
   count(date)
 
+#can we identify the most recent Sunday, and then go back from that through prev. Monday? (Since weeks will be Mon-Sun)
+
+
+
+
+# weekly/daily rankings #### ---------
+
+# group by date
+fcheck %>% 
+  count(date) %>% 
+  arrange(desc(n))
+
+# group by week
+fcheck %>% 
+  count(isoweek) %>% 
+  arrange(desc(n))
+
+
+
+
+
+######
 
 fcheck %>% 
   count(kind_of_forum) %>% 
