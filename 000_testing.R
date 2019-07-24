@@ -82,12 +82,19 @@ fcheck %>%
 # group by date
 fcheck %>% 
   count(date) %>% 
-  arrange(desc(n))
+  arrange(desc(n)) %>% 
+  mutate(rank = dense_rank(n))
 
 # group by week
 fcheck %>% 
   count(isoweek) %>% 
-  arrange(desc(n))
+  arrange(desc(n)) %>% 
+  mutate(rank = dense_rank(n))
+
+# let's try to rank them now
+# using dense_rank() which doesn't skip numbers and uses ties (there's also min_rank which skips after a tie)
+
+
 
 
 

@@ -57,7 +57,8 @@ fcheck <- fcheck %>%
     year = year(date),
     month = month(date),
     day = day(date),
-    week = week(date)
+    day_of_week = weekdays(date, abbreviate = T),
+    isoweek = isoweek(date) #isoweek starts on MONDAYS
   )
 
 #convert certain columns to factors for DT table filter capability
@@ -534,6 +535,115 @@ e <- ggplot(data = bysubject, aes(x = reorder(tag, -n), y = n)) +
     # color = "#848484",
     fill = "#f4a8a7") +
   # coord_flip() +
+  theme_minimal()
+
+e2 <- e + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ee <- ggplotly(e2)
+
+ee_nomenu <- ee %>% config(displayModeBar = FALSE)
+ee_nomenu
+
+
+```
+
+
+
+
+Time-based Rankings (All) 
+===================================== 
+Some rankings of all Trump false claims  
+
+
+Row 
+-----------------------------------------------------------------------
+
+
+### Top individual days for falsehoods
+
+```{r}
+
+bytopdates <- fcheck %>% 
+  count(date) %>% 
+  arrange(desc(n)) %>% 
+  mutate(rank = dense_rank(n))
+
+
+d <- ggplot(data = bytopdates, aes(x = reorder(date, n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "#CC3300") +
+  coord_flip() +
+  theme_minimal()
+
+d2 <- d + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+dd <- ggplotly(d2)
+
+dd_nomenu <- dd %>% config(displayModeBar = FALSE)
+dd_nomenu
+
+# ggplot(corr.m, aes(x = reorder(miRNA, -value), y = value, fill = variable)) +
+#   geom_bar(stat = "identity")
+
+```
+
+
+### Top weeks for falsehoods
+
+```{r}
+
+bytopweeks <- fcheck %>% 
+  count(isoweek) %>% 
+  arrange(desc(n)) %>% 
+  mutate(rank = dense_rank(n))
+
+
+e <- ggplot(data = bytopweeks, aes(x = reorder(isoweek, n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "#CC3300") +
+  coord_flip() +
+  theme_minimal()
+
+e2 <- e + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ee <- ggplotly(e2)
+
+ee_nomenu <- ee %>% config(displayModeBar = FALSE)
+ee_nomenu
+
+
+```
+
+
+### Top months for falsehoods
+
+```{r}
+
+bytopmonths <- fcheck %>% 
+  count(month) %>% 
+  arrange(desc(n)) %>% 
+  mutate(rank = dense_rank(n))
+
+
+e <- ggplot(data = bytopmonths, aes(x = reorder(month, n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "#CC3300") +
+  coord_flip() +
   theme_minimal()
 
 e2 <- e + labs(x ="", y = "") +
