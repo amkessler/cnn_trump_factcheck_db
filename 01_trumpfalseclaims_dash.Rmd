@@ -1,12 +1,12 @@
 ---
-title: "Trump False Claims Data"
+title: "Trump False Claims Project"
 # resource_files:
 # - .httr-oauth
 output:
   flexdashboard::flex_dashboard:
     orientation: rows
     vertical_layout: fill
-    theme: cerulean
+    # theme: cerulean
 ---
 
 ```{r setup, include=FALSE}
