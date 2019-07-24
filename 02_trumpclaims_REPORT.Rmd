@@ -1,5 +1,5 @@
 ---
-title: "Trump Falsehood Breakdowns"
+title: "Trump Falsehood Breakdown Report"
 output:
   html_document: default
 ---
@@ -211,73 +211,102 @@ Summary breakdowns below as of `r format(Sys.time(), "%a %b %d %X")`
 
 
 
-### By Key Race Rating
+### Topline Totals *To Date*
 
+Total Trump false claims: `r fcheck %>% nrow()`
 
-Key races overall 
+Number of forum types: `r fcheck %>% count(kind_of_forum)`
+
+Top forum type: `r fcheck %>% count(kind_of_forum) %>% arrange(desc(n)) %>% head(1) %>% select(kind_of_forum) %>% pull() %>% str_to_title()`
+
+Top individual forum: `r fcheck %>% count(forum) %>% arrange(desc(n)) %>% head(1) %>% select(kind_of_forum) %>% pull() %>% str_to_title()`
+
+Top 5 Subject Categories 
 ```{r echo=FALSE}
-WORKINGTABLE %>% 
-  filter(!is.na(keyrace_rating)) %>% 
-  count(current_party, live_winning) %>% 
-    kable() %>% 
-    kable_styling(bootstrap_options = c("striped", "condensed"), 
-                full_width = F,
-                position = "left")
-
-```
-
-Key races by current party holding
-```{r echo=FALSE}
-WORKINGTABLE %>% 
-  filter(!is.na(keyrace_rating)) %>% 
-  count(keyrace_rating_wcurparty, live_winning) %>% 
-    kable() %>% 
-    kable_styling(bootstrap_options = c("striped", "condensed"), 
+category_tag_count %>%
+  head(5) %>%
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"),
                 full_width = F,
                 position = "left")
 
 ```
 
 
-### Breakdowns by Flips
 
-By college education
-```{r echo=FALSE}
-  WORKINGTABLE %>% 
-    filter(flips == "Y") %>% 
-    count(live_winning, pct.ed.college.all.abovebelow.natl) %>% 
-    kable() %>% 
-    kable_styling(bootstrap_options = c("striped", "condensed"), 
-                full_width = F,
-                position = "left")
+<!-- ```{r} -->
 
 
-```
 
-By median income
-```{r echo=FALSE}
-  WORKINGTABLE %>% 
-    filter(flips == "Y") %>% 
-    count(live_winning, medincome.abovebelow.natl) %>% 
-    kable() %>% 
-    kable_styling(bootstrap_options = c("striped", "condensed"), 
-                full_width = F,
-                position = "left")
+<!-- fcheck %>%  -->
+<!--   filter(!is.na(keyrace_rating)) %>%  -->
+<!--   count(current_party, live_winning) %>%  -->
+<!--     kable() %>%  -->
+<!--     kable_styling(bootstrap_options = c("striped", "condensed"),  -->
+<!--                 full_width = F, -->
+<!--                 position = "left") -->
 
 
-```
+<!-- #total count -->
+<!-- count_total <- fcheck %>% -->
+<!--   nrow() -->
+
+<!-- #total count - previous week only -->
+<!-- count_prevweek_total <- fcheck_PREVWEEK %>% -->
+<!--   nrow() -->
 
 
-By median age
-```{r echo=FALSE}
-  WORKINGTABLE %>% 
-    filter(flips == "Y") %>% 
-    count(live_winning, medage.abovebelow.natl) %>% 
-    kable() %>% 
-    kable_styling(bootstrap_options = c("striped", "condensed"), 
-                full_width = F,
-                position = "left")
+<!-- #kind of forum count -->
+<!-- count_forum_kind <- fcheck %>% -->
+<!--   count(kind_of_forum) -->
+
+<!-- #kind of forum count - previous week only -->
+<!-- count_prevweek_forum_kind <- fcheck_PREVWEEK %>% -->
+<!--   count(kind_of_forum) -->
 
 
-```
+<!-- #top kind of forum -->
+<!-- top_forum_kind <- fcheck %>% -->
+<!--   count(kind_of_forum) %>% -->
+<!--   arrange(desc(n)) %>% -->
+<!--   head(1) %>% -->
+<!--   select(kind_of_forum) %>% -->
+<!--   pull() %>% -->
+<!--   str_to_title() -->
+
+<!-- #top kind of forum - previous week only -->
+<!-- top_prevweek_forum_kind <- fcheck_PREVWEEK %>% -->
+<!--   count(kind_of_forum) %>% -->
+<!--   arrange(desc(n)) %>% -->
+<!--   head(1) %>% -->
+<!--   select(kind_of_forum) %>% -->
+<!--   pull() %>% -->
+<!--   str_to_title() -->
+
+
+<!-- #top forum -->
+<!-- top_forum <- fcheck %>% -->
+<!--   count(forum) %>% -->
+<!--   arrange(desc(n)) %>% -->
+<!--   head(1) %>% -->
+<!--   select(forum) %>% -->
+<!--   pull() %>% -->
+<!--   str_to_title() -->
+
+<!-- #top forum - previous week only -->
+<!-- top_prevweek_forum <- fcheck_PREVWEEK %>% -->
+<!--   count(forum) %>% -->
+<!--   arrange(desc(n)) %>% -->
+<!--   head(1) %>% -->
+<!--   select(forum) %>% -->
+<!--   pull() %>% -->
+<!--   str_to_title() -->
+
+
+
+
+<!-- ``` -->
+
+
+
 
