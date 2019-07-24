@@ -60,11 +60,21 @@ fcheck <- fcheck %>%
     week = week(date)
   )
 
+#convert certain columns to factors for DT table filter capability
 fcheck <- fcheck %>% 
   mutate(
     kind_of_forum = as.factor(kind_of_forum),
     location = as.factor(location)
   )
+
+# remove NAs from category columns 
+fcheck$category_tag1 <- fcheck$category_tag1 %>% replace_na("")
+fcheck$category_tag2 <- fcheck$category_tag2 %>% replace_na("")
+fcheck$category_tag3 <- fcheck$category_tag3 %>% replace_na("")
+fcheck$category_tag4 <- fcheck$category_tag4 %>% replace_na("")
+
+#create combined column with all category tags together in one
+fcheck$category_combined <- paste0(fcheck$category_tag1, " ", fcheck$category_tag2, " ", fcheck$category_tag3, " ", fcheck$category_tag4)
 
 # remove NAs from link column 
 fcheck$source_article <- fcheck$source_article %>% replace_na("")
@@ -232,6 +242,7 @@ fcheck_table <- fcheck %>%
          location,
          claim,
          fact_check,
+         category_combined,
          source_article
 ) %>% 
   arrange(desc(date))
