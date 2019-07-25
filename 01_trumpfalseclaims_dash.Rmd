@@ -563,6 +563,20 @@ Time-based Rankings
 Row 
 -----------------------------------------------------------------------
 
+### Top days this *past week*
+
+```{r}
+
+fcheck_PREVWEEK %>% 
+  count(date) %>% 
+  arrange(desc(n)) %>% 
+  mutate(rank = min_rank(desc(n))) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped"))
+
+
+```
+
 
 ### Top individual days (all)
 
@@ -578,19 +592,6 @@ fcheck %>%
 
 ```
 
-### Top days this past week
-
-```{r}
-
-fcheck_PREVWEEK %>% 
-  count(date) %>% 
-  arrange(desc(n)) %>% 
-  mutate(rank = min_rank(desc(n))) %>% 
-    kable() %>%
-    kable_styling(bootstrap_options = c("striped"))
-
-
-```
 
 ### Top weeks 
 
@@ -627,20 +628,6 @@ Row {data-height=200}
 -----------------------------------------------------------------------
 
 
-### Average claims per day
-
-```{r}
-
-avg_per_day <- fcheck %>% 
-  count(date) %>% 
-  summarise(mean(n)) %>% 
-  pull()
-
-valueBox(avg_per_day, icon = "fa-pencil", color = "lightblue")
-
-```
-
-
 ### Average claims this *past week*
 
 ```{r}
@@ -650,9 +637,24 @@ avg_per_day_prevweek <- fcheck_PREVWEEK %>%
   summarise(mean(n)) %>% 
   pull()
 
-valueBox(avg_per_day_prevweek, color = "blue")
+valueBox(avg_per_day_prevweek, color = "#c99128")
 
 ```
+
+
+### Average claims per day
+
+```{r}
+
+avg_per_day <- fcheck %>% 
+  count(date) %>% 
+  summarise(mean(n)) %>% 
+  pull()
+
+valueBox(avg_per_day, color = "#c99128")
+
+```
+
 
 
 ### Average claims per week
@@ -664,7 +666,7 @@ avg_per_week <- fcheck %>%
   summarise(mean(n)) %>% 
   pull()
 
-valueBox(avg_per_week, color = "blue")
+valueBox(avg_per_week, color = "#c99128")
 
 ```
 
@@ -678,6 +680,6 @@ avg_per_month <- fcheck %>%
   summarise(mean(n)) %>% 
   pull()
 
-valueBox(avg_per_month, color = "blue")
+valueBox(avg_per_month, color = "#c99128")
 
 ```
