@@ -31,10 +31,10 @@ library(readxl)
 
 
 raw_data <- read_excel("TRUMP FACT-CHECKS.xlsx", 
-                                sheet = "ak", col_types = c("date", "text", 
-                                                            "text", "text", "text", "text", "text", 
-                                                            "text", "text", "text", "numeric", 
-                                                            "text"))
+    sheet = "ak", col_types = c("date", "text", 
+        "text", "text", "text", "text", "text", 
+        "text", "text", "text", "text", "text", 
+        "text"))
 
 
 glimpse(raw_data)
