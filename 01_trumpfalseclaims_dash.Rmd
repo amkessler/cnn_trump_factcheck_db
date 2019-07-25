@@ -554,50 +554,17 @@ ee_nomenu
 
 
 
-Time-based Rankings (All) 
+
+Time-based Rankings
 ===================================== 
-Some rankings of all Trump false claims  
+
 
 
 Row 
 -----------------------------------------------------------------------
 
 
-### Top individual days for falsehoods
-
-```{r}
-
-bytopdates <- fcheck %>% 
-  count(date) %>% 
-  arrange(desc(n)) %>% 
-  mutate(rank = dense_rank(n))
-
-
-d <- ggplot(data = bytopdates, aes(x = reorder(date, n), y = n)) +
-  geom_col(
-    # color = "#848484",
-    fill = "#CC3300") +
-  coord_flip() +
-  theme_minimal()
-
-d2 <- d + labs(x ="", y = "") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  # scale_fill_manual(values=cbPalette) +
-  theme(legend.title=element_blank()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-dd <- ggplotly(d2)
-
-dd_nomenu <- dd %>% config(displayModeBar = FALSE)
-dd_nomenu
-
-# ggplot(corr.m, aes(x = reorder(miRNA, -value), y = value, fill = variable)) +
-#   geom_bar(stat = "identity")
-
-```
-
-
-### Top days - table
+### Top individual days (all)
 
 ```{r}
 
@@ -606,78 +573,111 @@ fcheck %>%
   arrange(desc(n)) %>% 
   mutate(rank = min_rank(desc(n))) %>% 
     kable() %>%
-    kable_styling(bootstrap_options = c("striped", "condensed"),
-                full_width = F,
-                position = "left")
+    kable_styling(bootstrap_options = c("striped"))
 
+
+```
+
+### Top days this past week
+
+```{r}
+
+fcheck_PREVWEEK %>% 
+  count(date) %>% 
+  arrange(desc(n)) %>% 
+  mutate(rank = min_rank(desc(n))) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped"))
+
+
+```
+
+### Top weeks 
+
+```{r}
+
+fcheck %>% 
+  count(year, isoweek) %>% 
+  arrange(desc(n)) %>% 
+  mutate(rank = min_rank(desc(n))) %>% 
+  rename(week = isoweek) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped"))
 
 
 ```
 
 
-### Top weeks for falsehoods
+### Top months 
 
 ```{r}
 
-bytopweeks <- fcheck %>% 
+fcheck %>% 
+  count(year, month) %>% 
+  arrange(desc(n)) %>% 
+  mutate(rank = min_rank(desc(n))) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped"))
+
+
+```
+
+
+Row {data-height=200}
+-----------------------------------------------------------------------
+
+
+### Average claims per day
+
+```{r}
+
+avg_per_day <- fcheck %>% 
+  count(date) %>% 
+  summarise(mean(n)) %>% 
+  pull()
+
+valueBox(avg_per_day, icon = "fa-pencil", color = "lightblue")
+
+```
+
+
+### Average claims this *past week*
+
+```{r}
+
+avg_per_day_prevweek <- fcheck_PREVWEEK %>% 
+  count(date) %>% 
+  summarise(mean(n)) %>% 
+  pull()
+
+valueBox(avg_per_day_prevweek, color = "blue")
+
+```
+
+
+### Average claims per week
+
+```{r}
+
+avg_per_week <- fcheck %>% 
   count(isoweek) %>% 
-  arrange(desc(n)) %>% 
-  mutate(rank = dense_rank(n))
+  summarise(mean(n)) %>% 
+  pull()
 
-
-e <- ggplot(data = bytopweeks, aes(x = reorder(isoweek, n), y = n)) +
-  geom_col(
-    # color = "#848484",
-    fill = "#CC3300") +
-  coord_flip() +
-  theme_minimal()
-
-e2 <- e + labs(x ="", y = "") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  # scale_fill_manual(values=cbPalette) +
-  theme(legend.title=element_blank()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-ee <- ggplotly(e2)
-
-ee_nomenu <- ee %>% config(displayModeBar = FALSE)
-ee_nomenu
-
+valueBox(avg_per_week, color = "blue")
 
 ```
 
 
-### Top months for falsehoods
+### Average claims per month
 
 ```{r}
 
-bytopmonths <- fcheck %>% 
+avg_per_month <- fcheck %>% 
   count(month) %>% 
-  arrange(desc(n)) %>% 
-  mutate(rank = dense_rank(n))
+  summarise(mean(n)) %>% 
+  pull()
 
-
-e <- ggplot(data = bytopmonths, aes(x = reorder(month, n), y = n)) +
-  geom_col(
-    # color = "#848484",
-    fill = "#CC3300") +
-  coord_flip() +
-  theme_minimal()
-
-e2 <- e + labs(x ="", y = "") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  # scale_fill_manual(values=cbPalette) +
-  theme(legend.title=element_blank()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-ee <- ggplotly(e2)
-
-ee_nomenu <- ee %>% config(displayModeBar = FALSE)
-ee_nomenu
-
+valueBox(avg_per_month, color = "blue")
 
 ```
-
-
-
-
