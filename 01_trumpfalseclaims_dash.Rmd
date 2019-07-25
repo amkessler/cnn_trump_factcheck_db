@@ -597,7 +597,6 @@ Row
 fcheck_PREVWEEK %>% 
   count(date) %>% 
   arrange(desc(n)) %>% 
-  head(5) %>% 
   mutate(rank = min_rank(desc(n))) %>% 
     kable() %>%
     kable_styling(bootstrap_options = c("striped"))
@@ -659,7 +658,7 @@ Row {data-height=200}
 -----------------------------------------------------------------------
 
 
-### Average claims this *past week*
+### Average claims for the `r week_range_string`
 
 ```{r}
 
