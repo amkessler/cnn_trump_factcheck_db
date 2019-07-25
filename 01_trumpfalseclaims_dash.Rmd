@@ -639,7 +639,8 @@ Row {data-height=200}
 avg_per_day_prevweek <- fcheck_PREVWEEK %>% 
   count(date) %>% 
   summarise(mean(n)) %>% 
-  pull()
+  pull() %>% 
+  round_half_up(digits = 1)
 
 valueBox(avg_per_day_prevweek, color = "#9c9293")
 
@@ -653,7 +654,8 @@ valueBox(avg_per_day_prevweek, color = "#9c9293")
 avg_per_day <- fcheck %>% 
   count(date) %>% 
   summarise(mean(n)) %>% 
-  pull()
+  pull() %>% 
+  round_half_up(digits = 1)
 
 valueBox(avg_per_day, color = "#9c9293")
 
@@ -668,7 +670,8 @@ valueBox(avg_per_day, color = "#9c9293")
 avg_per_week <- fcheck %>% 
   count(isoweek) %>% 
   summarise(mean(n)) %>% 
-  pull()
+  pull()%>% 
+  round_half_up(digits = 1)
 
 valueBox(avg_per_week, color = "#9c9293")
 
@@ -682,7 +685,8 @@ valueBox(avg_per_week, color = "#9c9293")
 avg_per_month <- fcheck %>% 
   count(month) %>% 
   summarise(mean(n)) %>% 
-  pull()
+  pull() %>% 
+  round_half_up(digits = 1)
 
 valueBox(avg_per_month, color = "#9c9293")
 
