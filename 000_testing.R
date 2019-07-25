@@ -7,12 +7,13 @@ library(ggmap)
 library(plotly)
 library(RColorBrewer)
 library(readxl)
+library(glue)
 
 raw_data <- read_excel("TRUMP FACT-CHECKS.xlsx", 
-                                sheet = "ak", col_types = c("date", "text", 
-                                                            "text", "text", "text", "text", "text", 
-                                                            "text", "text", "text", "numeric", 
-                                                            "text"))
+                       sheet = "ak", col_types = c("date", "text", 
+                                                   "text", "text", "text", "text", "text", 
+                                                   "text", "text", "text", "text", "text", 
+                                                   "text"))
 
 
 glimpse(raw_data)
@@ -72,8 +73,49 @@ fcheck %>%
          date >= today("EST")-7) %>% 
   count(date)
 
+
+
 #can we identify the most recent Sunday, and then go back from that through prev. Monday? (Since weeks will be Mon-Sun)
 
+fcheck %>% 
+  filter(day_of_week == "Mon")
+
+# https://stackoverflow.com/questions/32763491/find-most-recent-monday-for-a-dataframe
+
+dates <- as.Date(c("2019-07-12", "2019-02-19", "2019-07-01"))
+
+dates <- today()
+
+weekdays(dates)
+
+wdays <- setNames(0:6, c("Monday", "Tuesday", "Wednesday",
+                         "Thursday", "Friday", "Saturday", "Sunday"))
+
+weekdays(dates - wdays[weekdays(dates)])
+
+# #find previous Mon date?
+# dates - match(weekdays(dates), c("Monday", "Tuesday", "Wednesday", 
+#                                  "Thursday", "Friday", "Saturday", "Sunday")) + 1
+
+#find previous SUN date?
+most_recent_sunday <- dates - match(weekdays(dates), c("Monday", "Tuesday", "Wednesday", 
+                                 "Thursday", "Friday", "Saturday", "Sunday"))
+
+#calculate Monday before that Sunday
+monday_before_recent_sunday <- most_recent_sunday - 6
+
+#now let's try to use this to filter our dates from the table
+#pulling last week only? ####
+fcheck %>%
+  filter(date <= most_recent_sunday,
+         date >= monday_before_recent_sunday) %>% 
+  count(date)
+
+#formatted dates for text output string
+monday_formatted <- format(monday_before_recent_sunday, "%a %b %d")
+sunday_formatted <- format(most_recent_sunday, "%a %b %d")
+
+glue("Week from {monday_formatted} through {sunday_formatted}")
 
 
 
