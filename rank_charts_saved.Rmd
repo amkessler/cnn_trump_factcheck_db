@@ -572,9 +572,7 @@ fcheck %>%
   arrange(desc(n)) %>% 
   mutate(rank = min_rank(desc(n))) %>% 
     kable() %>%
-    kable_styling(bootstrap_options = c("striped", "condensed"),
-                full_width = F,
-                position = "left")
+    kable_styling(bootstrap_options = c("striped"))
 
 
 ```
@@ -585,13 +583,12 @@ fcheck %>%
 ```{r}
 
 fcheck %>% 
-  count(isoweek) %>% 
+  count(year, isoweek) %>% 
   arrange(desc(n)) %>% 
   mutate(rank = min_rank(desc(n))) %>% 
+  rename(week = isoweek) %>% 
     kable() %>%
-    kable_styling(bootstrap_options = c("striped", "condensed"),
-                full_width = F,
-                position = "left")
+    kable_styling(bootstrap_options = c("striped"))
 
 
 ```
@@ -606,13 +603,16 @@ fcheck %>%
   arrange(desc(n)) %>% 
   mutate(rank = min_rank(desc(n))) %>% 
     kable() %>%
-    kable_styling(bootstrap_options = c("striped", "condensed"),
-                full_width = F,
-                position = "left")
+    kable_styling(bootstrap_options = c("striped"))
 
 
 ```
 
+### Top TBD 
 
 
+Row 
+-----------------------------------------------------------------------
 
+
+### Top TBD 2 
