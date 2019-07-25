@@ -17,6 +17,7 @@ library(lubridate)
 library(janitor)
 library(glue)
 library(plotly)
+library(taucharts)
 library(DT)
 library(googlesheets)
 library(kableExtra)
@@ -696,4 +697,28 @@ valueBox(avg_per_month, color = "#9c9293")
 Row 
 -----------------------------------------------------------------------
 
-Line chart here to come
+### Timeline of daily false claims
+
+```{r}
+
+bydate <- fcheck %>%
+  count(date) 
+
+
+p <- plot_ly(bydate, x = ~date, y = ~n, name = 'claimsperday', type = 'scatter',
+             mode = 'lines+markers', connectgaps = TRUE)
+
+p %>% config(displayModeBar = FALSE)
+
+
+# tauchart(bydate) %>%
+#   tau_line("date", "n") %>%
+#   tau_guide_x(label="Date") %>%
+#   tau_guide_y(label="Count of false claims", label_padding=50) 
+# %>%
+#   tau_guide_padding(70, 70, 10, 10)
+
+
+```
+
+### TBD
