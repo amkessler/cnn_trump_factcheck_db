@@ -63,6 +63,11 @@ library(readxl)
 
 fcheck <- readRDS("saved_versions/fcheck_saved.rds")
 
+fcheck <- fcheck %>% 
+  filter(!is.na(date))
+
+
+
 #convert certain columns to factors for DT table filter capability
 fcheck <- fcheck %>% 
   mutate(
@@ -673,7 +678,7 @@ valueBox(avg_per_day_prevweek, color = "#9c9293")
 ```
 
 
-### Average claims per day
+### Average claims per day (all)
 
 ```{r}
 
