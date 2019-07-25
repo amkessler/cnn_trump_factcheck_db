@@ -597,6 +597,24 @@ dd_nomenu
 ```
 
 
+### Top days - table
+
+```{r}
+
+fcheck %>% 
+  count(date) %>% 
+  arrange(desc(n)) %>% 
+  mutate(rank = min_rank(desc(n))) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"),
+                full_width = F,
+                position = "left")
+
+
+
+```
+
+
 ### Top weeks for falsehoods
 
 ```{r}
