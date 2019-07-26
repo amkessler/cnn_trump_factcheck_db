@@ -7,6 +7,7 @@ output:
     orientation: rows
     vertical_layout: fill
     # theme: yeti
+    runtime: shiny
 
 ---
 
@@ -955,12 +956,43 @@ fcheck %>%
 
 
 
-Shiny Tab Test
+Shiny Test
 ===================================== 
 
 
 
-Row 
+Row {.sidebar}
+-----------------------------------------------------------------------
+
+Sidebar description here
+
+```{r}
+selectInput("forumtype_input", label = "Number of bins:",
+            choices = c("EVENT", "INTERVIEW", "SPEECH"), selected = "SPEECH")
+
+# sliderInput("bw_adjust", label = "Bandwidth adjustment:",
+#             min = 0.2, max = 2, value = 1, step = 0.2)
+```
+
+
+
+Row
 -----------------------------------------------------------------------
 
 ### Shiny testing
+
+
+```{r}
+
+
+byftype = reactive({
+  fcheck %>%
+  count(input$forumtype_input) 
+})
+
+renderTable({
+  byftype
+})
+
+```
+
