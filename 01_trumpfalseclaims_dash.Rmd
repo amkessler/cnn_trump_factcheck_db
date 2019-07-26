@@ -143,9 +143,9 @@ count_prevweek_total <- fcheck_PREVWEEK %>%
 count_forum_kind <- fcheck %>% 
   count(kind_of_forum) 
 
-#kind of forum count - previous week only
-count_prevweek_forum_kind <- fcheck_PREVWEEK %>% 
-  count(kind_of_forum) 
+#kind of forum - previous week only
+count_prevweek_forum <- fcheck_PREVWEEK %>% 
+  count(forum) 
 
 
 #top kind of forum 
@@ -320,11 +320,12 @@ valueBox(tot, icon = "fa-pencil", color = "blue")
 
 ```
 
-### Number of forum types for the week
+### Number of forums for the week
 
 ```{r}
 
-num_forums <- count_prevweek_forum_kind %>% 
+num_forums <- count_prevweek_forum %>% 
+  filter(!is.na(forum)) %>% 
   nrow()
 
 valueBox(num_forums, icon = "fa-users", color = "green")
@@ -382,18 +383,19 @@ dd_nomenu
 ```
 
 
-### Top forum types
+### Top forums
 
 ```{r}
 
-byforumtype <- fcheck_PREVWEEK %>%
-  count(kind_of_forum) %>%
+byforum <- fcheck_PREVWEEK %>%
+  filter(!is.na(forum)) %>% 
+  count(forum) %>%
   arrange(desc(n)) %>%
   head() %>%
   ungroup()
 
 
-e <- ggplot(data = byforumtype, aes(x = reorder(kind_of_forum, -n), y = n)) +
+e <- ggplot(data = byforum, aes(x = reorder(forum, -n), y = n)) +
   geom_col(
     # color = "#848484",
     fill = "#A8E9A8") +
