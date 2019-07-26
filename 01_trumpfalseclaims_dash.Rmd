@@ -777,3 +777,175 @@ p %>% config(displayModeBar = FALSE)
 ```
 
 ### TBD
+
+
+
+
+Forum-based Rankings
+===================================== 
+
+
+
+Row 
+-----------------------------------------------------------------------
+
+### REMARKS with the most false claims
+
+```{r}
+
+fcheck %>% 
+  count(kind_of_forum, date, forum) %>% 
+  filter(kind_of_forum == "REMARKS") %>% 
+  mutate(
+    date = format(date, "%b %d")      
+    ) %>%
+  arrange(kind_of_forum, desc(n)) %>% 
+  head(5) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"))
+
+
+```
+
+
+### INFORMAL REMARKS with the most false claims
+
+```{r}
+
+fcheck %>% 
+  count(kind_of_forum, date, forum) %>% 
+  filter(kind_of_forum == "INFORMAL REMARKS") %>% 
+  mutate(
+    date = format(date, "%b %d")      
+    ) %>%
+  arrange(kind_of_forum, desc(n)) %>% 
+  head(5) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"))
+
+
+```
+
+
+Row 
+-----------------------------------------------------------------------
+
+### SPEECHES with the most false claims
+
+```{r}
+
+fcheck %>% 
+  count(kind_of_forum, date, forum) %>% 
+  filter(kind_of_forum == "SPEECH") %>% 
+  mutate(
+    date = format(date, "%b %d")      
+    ) %>%
+  arrange(kind_of_forum, desc(n)) %>% 
+  head(5) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"))
+
+
+```
+
+
+### RALLY SPEECHES with the most false claims
+
+```{r}
+
+fcheck %>% 
+  count(kind_of_forum, date, forum) %>% 
+  filter(kind_of_forum == "RALLY SPEECH") %>% 
+  mutate(
+    date = format(date, "%b %d")      
+    ) %>%
+  arrange(kind_of_forum, desc(n)) %>% 
+  head(5) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"))
+
+
+```
+
+
+
+Row 
+-----------------------------------------------------------------------
+
+### EXCHANGES WITH REPORTERS with the most false claims
+
+```{r}
+
+fcheck %>% 
+  count(kind_of_forum, date, forum) %>% 
+  filter(kind_of_forum == "EXCHANGE WITH REPORTERS") %>% 
+  mutate(
+    date = format(date, "%b %d")      
+    ) %>%
+  arrange(kind_of_forum, desc(n)) %>% 
+  head(5) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"))
+
+
+```
+
+
+### INTERVIEWS with the most false claims
+
+```{r}
+
+fcheck %>% 
+  count(kind_of_forum, date, forum) %>% 
+  filter(kind_of_forum == "INTERVIEW") %>% 
+  mutate(
+    date = format(date, "%b %d")      
+    ) %>%
+  arrange(kind_of_forum, desc(n)) %>% 
+  head(5) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"))
+
+
+```
+
+
+Row 
+-----------------------------------------------------------------------
+
+### TWEETS with the most false claims
+
+```{r}
+
+fcheck %>% 
+  count(kind_of_forum, date, forum) %>% 
+  filter(kind_of_forum == "TWEET") %>% 
+  mutate(
+    date = format(date, "%b %d")      
+    ) %>%
+  arrange(kind_of_forum, desc(n)) %>% 
+  head(5) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"))
+
+
+```
+
+
+### EVENTS with the most false claims
+
+```{r}
+
+fcheck %>% 
+  count(kind_of_forum, date, forum) %>% 
+  filter(kind_of_forum == "EVENT") %>% 
+  mutate(
+    date = format(date, "%b %d")      
+    ) %>%
+  arrange(kind_of_forum, desc(n)) %>% 
+  head(5) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"))
+
+
+```
