@@ -68,11 +68,11 @@ saveRDS(fcheck, "saved_versions/fcheck_saved.rds")
 fcheck
 
 
-#pulling last week only? ####
-fcheck %>%
-  filter(date <= today("EST"),
-         date >= today("EST")-7) %>% 
-  count(date)
+# #pulling last week only? ####
+# fcheck %>%
+#   filter(date <= today("EST"),
+#          date >= today("EST")-7) %>% 
+#   count(date)
 
 
 
