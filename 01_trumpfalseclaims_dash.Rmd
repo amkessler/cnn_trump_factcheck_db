@@ -609,7 +609,10 @@ Row
 fcheck_PREVWEEK %>% 
   count(date) %>% 
   arrange(date) %>% 
-  mutate(rank = min_rank(desc(n))) %>% 
+  mutate(
+    rank = min_rank(desc(n)),
+    date = format(date, "%b %d")      
+    ) %>% 
     kable() %>%
     kable_styling(bootstrap_options = c("striped"))
 
@@ -617,7 +620,7 @@ fcheck_PREVWEEK %>%
 ```
 
 
-### Top individual days (all)
+### Top individual days (all since `r format(min(fcheck$date), "%a %b %d")`)
 
 ```{r}
 
@@ -625,7 +628,10 @@ fcheck %>%
   count(date) %>% 
   arrange(desc(n)) %>% 
   head(5) %>% 
-  mutate(rank = min_rank(desc(n))) %>% 
+  mutate(
+    rank = min_rank(desc(n)),
+    date = format(date, "%b %d")      
+    ) %>% 
     kable() %>%
     kable_styling(bootstrap_options = c("striped"))
 
