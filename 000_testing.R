@@ -29,6 +29,7 @@ fcheck <- fcheck %>%
   mutate(
     kind_of_forum = str_trim(str_to_upper(kind_of_forum)),
     location = str_trim(str_to_upper(location)),
+    state = str_trim(str_to_upper(state)),
     category_tag1 = str_trim(str_to_upper(category_tag1)),
     category_tag2 = str_trim(str_to_upper(category_tag2)),
     category_tag3 = str_trim(str_to_upper(category_tag3)),

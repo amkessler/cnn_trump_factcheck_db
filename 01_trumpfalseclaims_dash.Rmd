@@ -30,39 +30,42 @@ options(tigris_class = "sf")
 library(readxl)
 
 
-# raw_data <- read_excel("TRUMP FACT-CHECKS.xlsx", 
-#     sheet = "ak", col_types = c("date", "text", 
-#         "text", "text", "text", "text", "text", 
-#         "text", "text", "text", "text", "text", 
-#         "text"))
-# 
-# glimpse(raw_data)
-# 
-# #clean column names
-# fcheck <- raw_data %>% 
-#   clean_names() 
-# 
-# names(fcheck)
-# 
-# #set formatting of certain columns and break out dates into own columns
-# fcheck <- fcheck %>% 
-#   mutate(
-#     kind_of_forum = str_trim(str_to_upper(kind_of_forum)),
-#     location = str_trim(str_to_upper(location)),
-#     category_tag1 = str_trim(str_to_upper(category_tag1)),
-#     category_tag2 = str_trim(str_to_upper(category_tag2)),
-#     category_tag3 = str_trim(str_to_upper(category_tag3)),
-#     category_tag4 = str_trim(str_to_upper(category_tag4)),
-#     year = year(date),
-#     month = month(date),
-#     day = day(date),
-#     day_of_week = weekdays(date, abbreviate = T),
-#     isoweek = isoweek(date) #isoweek starts on MONDAYS
-#   )
-# 
+raw_data <- read_excel("TRUMP FACT-CHECKS.xlsx", 
+                       sheet = "ak", col_types = c("date", "text", 
+                                                   "text", "text", "text", "text", "text", 
+                                                   "text", "text", "text", "text", "text", 
+                                                   "text"))
 
-fcheck <- readRDS("saved_versions/fcheck_saved.rds")
+glimpse(raw_data)
 
+#clean column names
+fcheck <- raw_data %>%
+  clean_names()
+
+names(fcheck)
+
+#set formatting of certain columns and break out dates into own columns
+fcheck <- fcheck %>%
+  mutate(
+    kind_of_forum = str_trim(str_to_upper(kind_of_forum)),
+    location = str_trim(str_to_upper(location)),
+    state = str_trim(str_to_upper(state)),
+    category_tag1 = str_trim(str_to_upper(category_tag1)),
+    category_tag2 = str_trim(str_to_upper(category_tag2)),
+    category_tag3 = str_trim(str_to_upper(category_tag3)),
+    category_tag4 = str_trim(str_to_upper(category_tag4)),
+    year = year(date),
+    month = month(date),
+    day = day(date),
+    day_of_week = weekdays(date, abbreviate = T),
+    isoweek = isoweek(date) #isoweek starts on MONDAYS
+  )
+
+
+# fcheck <- readRDS("saved_versions/fcheck_saved.rds")
+
+
+# filter out where dates are missing
 fcheck <- fcheck %>% 
   filter(!is.na(date))
 
@@ -72,7 +75,8 @@ fcheck <- fcheck %>%
 fcheck <- fcheck %>% 
   mutate(
     kind_of_forum = as.factor(kind_of_forum),
-    location = as.factor(location)
+    location = as.factor(location),
+    state = as.factor(state)
   )
 
 # remove NAs from category columns 
@@ -255,7 +259,7 @@ t <- .POSIXct(t, "EST")
 
 Searchable Database 
 ===================================== 
-Trump false claim fact checks compiled by CNN. To filter the list, click on the boxes above the columns. To sort, click on the arrows by the column names. To search globally by keywords, use the search box on the right. 
+Trump false claims compiled by CNN. To **filter** the list, click on the boxes above the columns. To **sort**, click on the arrows by the column names. To **search globally** by keywords, use the search box on the right. 
 (Last updated on `r format(t, format="%B %d %I:%M %p %Z")`)
 
 
@@ -273,6 +277,7 @@ fcheck_table <- fcheck %>%
          kind_of_forum,
          forum,
          location,
+         state,
          claim,
          fact_check,
          category_combined,
