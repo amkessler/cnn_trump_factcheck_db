@@ -608,7 +608,7 @@ Row
 
 fcheck_PREVWEEK %>% 
   count(date) %>% 
-  arrange(desc(n)) %>% 
+  arrange(date) %>% 
   mutate(rank = min_rank(desc(n))) %>% 
     kable() %>%
     kable_styling(bootstrap_options = c("striped"))
@@ -692,13 +692,26 @@ valueBox(avg_per_day_prevweek, color = "#9c9293")
 
 ```{r}
 
-avg_per_day <- fcheck %>% 
-  count(date) %>% 
-  summarise(mean(n)) %>% 
-  pull() %>% 
-  round_half_up(digits = 1)
+# https://data.library.virginia.edu/working-with-dates-and-time-in-r-using-the-lubridate-package/
+# calculate total number of days since first recorded date
+start <- min(fcheck$date)
+end <- today()
+#calculate elapsed time interval
+elapsed.time <- start %--% end
+#calculate duration of days
+totaldays_sincestart <- as.duration(elapsed.time) / ddays(1)
 
-valueBox(avg_per_day, color = "#9c9293")
+#now we'll sum up the total of false claims per day
+sumdailytotals <- fcheck %>% 
+  count(date) %>% #might not need this step at all anymore
+  summarise(sum(n)) %>% 
+  pull() 
+
+#calculate average
+avg_per_day_all <- round_half_up(sumdailytotals / totaldays_sincestart, digits = 1)
+
+valueBox(avg_per_day_all, color = "#9c9293")
+
 
 ```
 
