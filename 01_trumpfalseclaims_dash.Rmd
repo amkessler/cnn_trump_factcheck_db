@@ -688,7 +688,7 @@ valueBox(avg_per_day_prevweek, color = "#9c9293")
 ```
 
 
-### Average claims per day (all)
+### Average claims per day since `r format(min(fcheck$date), "%a %b %d")`
 
 ```{r}
 
