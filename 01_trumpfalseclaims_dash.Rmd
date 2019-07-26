@@ -7,6 +7,7 @@ output:
     orientation: rows
     vertical_layout: fill
     # theme: yeti
+
 ---
 
 ```{r setup, include=FALSE}
@@ -449,7 +450,7 @@ ee_nomenu
 
 Summary Counts (All) 
 ===================================== 
-Aggregate counts of *all* Trump false claims compiled by CNN 
+Aggregate counts of *all* Trump false claims compiled by CNN **since `r format(min(fcheck$date), "%a %b %d")`**
 
 
 Row {data-height=200}
