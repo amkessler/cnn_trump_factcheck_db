@@ -130,11 +130,18 @@ fcheck %>%
   arrange(desc(n)) %>% 
   mutate(rank = dense_rank(n))
 
+fcheck %>% 
+  count(date) %>% 
+  arrange(n)
+
+
 # group by week
 fcheck %>% 
   count(isoweek) %>% 
   arrange(desc(n)) %>% 
   mutate(rank = dense_rank(n))
+
+
 
 # now let's try to pull what the current day/week is rank-wise (e.g. "this is the 5th worst week for falsehoods")
 
