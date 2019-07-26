@@ -28,6 +28,7 @@ library(htmltools)
 library(tigris)
 options(tigris_class = "sf")
 library(readxl)
+library(writexl)
 
 
 raw_data <- read_excel("TRUMP FACT-CHECKS.xlsx", 
@@ -121,7 +122,7 @@ fcheck_PREVWEEK <- fcheck %>%
 monday_formatted <- format(monday_before_recent_sunday, "%a %b %d")
 sunday_formatted <- format(most_recent_sunday, "%a %b %d")
 
-week_range_string <- glue("week from {monday_formatted} through {sunday_formatted}")
+week_range_string <- glue("week of {monday_formatted} to {sunday_formatted}")
 
 
 
@@ -244,7 +245,8 @@ subject_count_PREVWEEK <- category_tag_PREVWEEK_count %>%
   nrow()
 
  
-
+#save copy to csv
+write_xlsx(fcheck, "saved_versions/fcheck_temp.xlsx")
 
 
 # set time object set to eastern time
@@ -600,7 +602,7 @@ Time-based Rankings
 Row 
 -----------------------------------------------------------------------
 
-### Top days for the `r week_range_string`
+### Daily tallies for `r week_range_string`
 
 ```{r}
 
@@ -645,6 +647,7 @@ fcheck %>%
     kable_styling(bootstrap_options = c("striped"))
 
 
+
 ```
 
 
@@ -668,17 +671,19 @@ Row {data-height=200}
 -----------------------------------------------------------------------
 
 
-### Average claims for the `r week_range_string`
+### Average claims per day during `r week_range_string`
 
 ```{r}
 
-avg_per_day_prevweek <- fcheck_PREVWEEK %>% 
+sumforprevweek <- fcheck_PREVWEEK %>% 
   count(date) %>% 
-  summarise(mean(n)) %>% 
-  pull() %>% 
-  round_half_up(digits = 1)
+  summarise(sum(n)) %>% 
+  pull() 
+
+avg_per_day_prevweek <- round_half_up(sumforprevweek / 7, digits = 1)
 
 valueBox(avg_per_day_prevweek, color = "#9c9293")
+
 
 ```
 
