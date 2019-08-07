@@ -57,6 +57,7 @@ fcheck <- fcheck %>%
     category_tag2 = str_trim(str_to_upper(category_tag2)),
     category_tag3 = str_trim(str_to_upper(category_tag3)),
     category_tag4 = str_trim(str_to_upper(category_tag4)),
+    category_tag5 = str_trim(str_to_upper(category_tag5)),
     year = year(date),
     month = month(date),
     day = day(date),
@@ -87,10 +88,11 @@ fcheck$category_tag1 <- fcheck$category_tag1 %>% replace_na("")
 fcheck$category_tag2 <- fcheck$category_tag2 %>% replace_na("")
 fcheck$category_tag3 <- fcheck$category_tag3 %>% replace_na("")
 fcheck$category_tag4 <- fcheck$category_tag4 %>% replace_na("")
+fcheck$category_tag5 <- fcheck$category_tag5 %>% replace_na("")
 fcheck$code_name <- fcheck$code_name %>% replace_na("")
 
 #create combined column with all category tags together in one
-fcheck$category_combined <- paste0(fcheck$category_tag1, " ", fcheck$category_tag2, " ", fcheck$category_tag3, " ", fcheck$category_tag4)
+fcheck$category_combined <- paste0(fcheck$category_tag1, " ", fcheck$category_tag2, " ", fcheck$category_tag3, " ", fcheck$category_tag4, " ", fcheck$category_tag5)
 
 # remove NAs from link column 
 fcheck$source_article <- fcheck$source_article %>% replace_na("")
@@ -202,8 +204,11 @@ tag3 <- fcheck %>%
 tag4 <- fcheck %>% 
   select(tag = category_tag4)
 
+tag5 <- fcheck %>% 
+  select(tag = category_tag5)
+
 #combine into one
-tag_combined <- bind_rows(tag1, tag2, tag3, tag4)
+tag_combined <- bind_rows(tag1, tag2, tag3, tag4, tag5)
 
 #filter out NAs and blanks
 tag_combined <- tag_combined %>% 
@@ -227,8 +232,11 @@ tag3b <- fcheck_PREVWEEK %>%
 tag4b <- fcheck_PREVWEEK %>% 
   select(tag = category_tag4)
 
+tag5b <- fcheck_PREVWEEK %>% 
+  select(tag = category_tag5)
+
 #combine into one
-tag_combined_oneweek <- bind_rows(tag1b, tag2b, tag3b, tag4b)
+tag_combined_oneweek <- bind_rows(tag1b, tag2b, tag3b, tag4b, tag5b)
 
 #filter out NAs
 tag_combined_PREVWEEK <- tag_combined_oneweek %>% 
