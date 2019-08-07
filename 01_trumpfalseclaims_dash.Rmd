@@ -33,10 +33,10 @@ library(writexl)
 
 
 raw_data <- read_excel("TRUMP FACT-CHECKS.xlsx", 
-                       sheet = "ak", col_types = c("date", "text", 
-                                                   "text", "text", "text", "text", "text", 
-                                                   "text", "text", "text", "text", "text", 
-                                                   "text"))
+    sheet = "ak", col_types = c("date", "text", 
+        "text", "text", "text", "text", "text", 
+        "text", "text", "text", "text", "text", 
+        "text", "text"))
 
 glimpse(raw_data)
 
@@ -52,6 +52,7 @@ fcheck <- fcheck %>%
     kind_of_forum = str_trim(str_to_upper(kind_of_forum)),
     location = str_trim(str_to_upper(location)),
     state = str_trim(str_to_upper(state)),
+    code_name = str_trim(str_to_upper(code_name)),
     category_tag1 = str_trim(str_to_upper(category_tag1)),
     category_tag2 = str_trim(str_to_upper(category_tag2)),
     category_tag3 = str_trim(str_to_upper(category_tag3)),
@@ -86,6 +87,7 @@ fcheck$category_tag1 <- fcheck$category_tag1 %>% replace_na("")
 fcheck$category_tag2 <- fcheck$category_tag2 %>% replace_na("")
 fcheck$category_tag3 <- fcheck$category_tag3 %>% replace_na("")
 fcheck$category_tag4 <- fcheck$category_tag4 %>% replace_na("")
+fcheck$code_name <- fcheck$code_name %>% replace_na("")
 
 #create combined column with all category tags together in one
 fcheck$category_combined <- paste0(fcheck$category_tag1, " ", fcheck$category_tag2, " ", fcheck$category_tag3, " ", fcheck$category_tag4)
@@ -203,9 +205,9 @@ tag4 <- fcheck %>%
 #combine into one
 tag_combined <- bind_rows(tag1, tag2, tag3, tag4)
 
-#filter out NAs
+#filter out NAs and blanks
 tag_combined <- tag_combined %>% 
-  filter(!is.na(tag))
+  filter(!is.na(tag), tag != "") 
 
 category_tag_count <- tag_combined %>% 
   count(tag) %>% 
@@ -226,11 +228,11 @@ tag4b <- fcheck_PREVWEEK %>%
   select(tag = category_tag4)
 
 #combine into one
-tag_combined <- bind_rows(tag1b, tag2b, tag3b, tag4b)
+tag_combined_oneweek <- bind_rows(tag1b, tag2b, tag3b, tag4b)
 
 #filter out NAs
-tag_combined_PREVWEEK <- tag_combined %>% 
-  filter(!is.na(tag))
+tag_combined_PREVWEEK <- tag_combined_oneweek %>% 
+  filter(!is.na(tag), tag != "") 
 
 category_tag_PREVWEEK_count <- tag_combined_PREVWEEK %>% 
   count(tag) %>% 
@@ -284,6 +286,7 @@ fcheck_table <- fcheck %>%
          claim,
          fact_check,
          category_combined,
+         code_name,
          source_article
 ) %>% 
   arrange(desc(date))
@@ -422,6 +425,7 @@ ee_nomenu
 ```{r}
 
 bysubject <- category_tag_PREVWEEK_count %>% 
+  filter(tag != "") %>% 
   head()
 
 
@@ -568,11 +572,12 @@ ee_nomenu
 
 ```{r}
 
-bysubject <- category_tag_count %>% 
+bysubject_all <- category_tag_count %>% 
+  filter(tag != "") %>% 
   head()
 
 
-e <- ggplot(data = bysubject, aes(x = reorder(tag, -n), y = n)) +
+e <- ggplot(data = bysubject_all, aes(x = reorder(tag, -n), y = n)) +
   geom_col(
     # color = "#848484",
     fill = "#f4a8a7") +
