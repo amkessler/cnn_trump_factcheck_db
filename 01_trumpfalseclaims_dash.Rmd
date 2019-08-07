@@ -255,8 +255,35 @@ subject_count <- category_tag_count %>%
 subject_count_PREVWEEK <- category_tag_PREVWEEK_count %>% 
   nrow()
 
+
+
+### count up coce_name variations #### --------------------
+
+#top kind of code name - previous week only
+top_prevweek_code_name <- fcheck_PREVWEEK %>% 
+  filter(code_name != "") %>% 
+  count(code_name) %>% 
+  arrange(desc(n)) %>% 
+  head(1) %>% 
+  select(code_name) %>% 
+  pull() %>% 
+  str_to_title()
+
+#number of code names from previous week
+count_prevweek_code_name <- fcheck_PREVWEEK %>% 
+  filter(code_name != "") %>% 
+  count(code_name) %>% 
+  nrow()
+
+#number of all code names 
+count_code_name <- fcheck %>% 
+  filter(code_name != "") %>% 
+  count(code_name) %>% 
+  nrow()
+
+
  
-#save copy to csv
+#save copy in case needed
 write_xlsx(fcheck, "saved_versions/fcheck_temp.xlsx")
 
 
@@ -349,6 +376,17 @@ valueBox(num_forums, icon = "fa-users", color = "green")
 ```{r}
 
 valueBox(subject_count_PREVWEEK, icon = "fa-book", color = "darkred")
+
+
+
+```
+
+
+### Number of code names for the week 
+
+```{r}
+
+valueBox(count_prevweek_code_name, icon = "fa-book", color = "purple")
 
 
 
@@ -459,6 +497,41 @@ ee_nomenu
 ```
 
 
+### Top code names
+
+```{r}
+
+bycodename <- fcheck_PREVWEEK %>% 
+  filter(code_name != "") %>% 
+  count(code_name) %>% 
+  ungroup() %>% 
+  head()
+
+
+
+g <- ggplot(data = bycodename, aes(x = reorder(code_name, -n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "#DA85E8") +
+  # coord_flip() +
+  theme_minimal()
+
+g2 <- g + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(breaks = function(x) unique(floor(pretty(seq(0, (max(x) + 1) * 1.1)))))
+
+gg <- ggplotly(g2)
+
+gg_nomenu <- gg %>% config(displayModeBar = FALSE)
+gg_nomenu
+
+
+```
+
+
 
 
 
@@ -502,6 +575,18 @@ valueBox(subject_count, icon = "fa-book", color = "darkred")
 
 
 ```
+
+
+### Number of all code names 
+
+```{r}
+
+valueBox(count_code_name, icon = "fa-book", color = "purple")
+
+
+
+```
+
 
 
 
@@ -607,6 +692,39 @@ ee_nomenu
 ```
 
 
+### Top code names
+
+```{r}
+
+bycodename <- fcheck %>% 
+  filter(code_name != "") %>% 
+  count(code_name) %>% 
+  ungroup() %>% 
+  head()
+
+
+
+g <- ggplot(data = bycodename, aes(x = reorder(code_name, -n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "#DA85E8") +
+  # coord_flip() +
+  theme_minimal()
+
+g2 <- g + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(breaks = function(x) unique(floor(pretty(seq(0, (max(x) + 1) * 1.1)))))
+
+gg <- ggplotly(g2)
+
+gg_nomenu <- gg %>% config(displayModeBar = FALSE)
+gg_nomenu
+
+
+```
 
 
 
