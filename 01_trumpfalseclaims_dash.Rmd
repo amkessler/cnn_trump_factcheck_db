@@ -600,6 +600,7 @@ Row {data-height=800}
 
 bydate <- fcheck %>%
   count(date) %>% 
+  arrange(desc(n)) %>%
   head() %>% 
   ungroup() 
 
@@ -637,7 +638,6 @@ byforumtype <- fcheck %>%
   arrange(desc(n)) %>%
   head() %>%
   ungroup()
-
 
 e <- ggplot(data = byforumtype, aes(x = reorder(kind_of_forum, -n), y = n)) +
   geom_col(
