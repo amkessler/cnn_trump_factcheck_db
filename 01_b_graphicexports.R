@@ -34,3 +34,18 @@ fcheck %>%
   head(10) %>% 
   ungroup() %>% 
   write_csv("forgfx/top_days.csv")
+
+
+# ALL days
+fcheck %>%
+  count(date) %>% 
+  ungroup() %>% 
+  write_csv("forgfx/alldailycounts_total.csv")
+
+# ALL days by forum_type
+fcheck %>%
+  count(date, kind_of_forum) %>% 
+  ungroup() %>% 
+  arrange(date, kind_of_forum) %>% 
+  write_csv("forgfx/alldailycounts_byforumtype.csv")
+
