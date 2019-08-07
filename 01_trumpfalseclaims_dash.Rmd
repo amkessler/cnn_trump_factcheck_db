@@ -265,7 +265,7 @@ d <- Sys.Date()
 # d <- .POSIXct(d, "EST")
   
 t <- Sys.time()
-t <- .POSIXct(t, "EST")
+# t <- .POSIXct(t, "EST")
 
 ```
 
