@@ -134,6 +134,35 @@ It was not clear what Trump meant by "82 years." Korea was a unified country unt
 `r fcheck$factcheck_moretext[1]`
 
 
+<!-- sample loop for markdown formatting https://stackoverflow.com/questions/17178831/generate-markdown-comments-within-for-loop -->
+
+```{r, results='asis'}
+headers <- list("We","are","your","friends")
+
+for (i in headers){
+  cat("\n#### ", i, "\n")
+  cat("comment",i)
+  cat("  \n")# <---------------------------------
+}
+
+```
+
+
+
+```{r testloop, results='asis'}
+position <- list(1, 2, 3)
+
+for (i in position){
+  cat("\n## ", fcheck$code_name[i], "\n")
+  cat(fcheck$claim[i], "--", format(fcheck$date[i], '%B %d'), "at", fcheck$forum[i])
+  cat("  \n")
+}
+
+```
+
+
+asdfasdfasdf
+asdfasdfasdfasf
 
 
 ```{r}
