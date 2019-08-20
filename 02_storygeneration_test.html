@@ -403,32 +403,18 @@ summary {
 <p><strong>Facts First:</strong> <em>Some Democrats, including presidential candidates such as Elizabeth Warren and Julián Castro, have advocated a significant loosening of immigration law, including a decriminalization of the act of illegally crossing the border. But none of them have proposed literally opening the border to unrestricted migration.</em></p>
 <p>NA</p>
 <!-- sample loop for markdown formatting https://stackoverflow.com/questions/17178831/generate-markdown-comments-within-for-loop -->
-<pre class="r"><code>headers &lt;- list(&quot;We&quot;,&quot;are&quot;,&quot;your&quot;,&quot;friends&quot;)
+<!-- ```{r, results='asis'} -->
+<!-- headers <- list("We","are","your","friends") -->
+<!-- for (i in headers){ -->
+<!--   cat("\n### ", i, "\n") -->
+<!--   cat("comment",i) -->
+<!--   cat("  \n")# <--------------------------------- -->
+<!-- } -->
+<!-- ``` -->
+<pre class="r"><code>lastnum &lt;- nrow(fcheck)
+numlist &lt;- as.list(seq(1,lastnum))
 
-for (i in headers){
-  cat(&quot;\n### &quot;, i, &quot;\n&quot;)
-  cat(&quot;comment&quot;,i)
-  cat(&quot;  \n&quot;)# &lt;---------------------------------
-}</code></pre>
-</div>
-<div id="we" class="section level3">
-<h3>We</h3>
-<p>comment We</p>
-</div>
-<div id="are" class="section level3">
-<h3>are</h3>
-<p>comment are</p>
-</div>
-<div id="your" class="section level3">
-<h3>your</h3>
-<p>comment your</p>
-</div>
-<div id="friends" class="section level3">
-<h3>friends</h3>
-<p>comment friends</p>
-<pre class="r"><code>position &lt;- list(1, 2, 3)
-
-for (i in position){
+for (i in numlist){
   cat(&quot;\n### &quot;, fcheck$code_name[i], &quot;\n&quot;)
   cat(fcheck$claim[i], &quot;--&quot;, format(fcheck$date[i], &#39;%B %d&#39;), &quot;at&quot;, fcheck$forum[i], &quot;\n&quot;)
   cat(&quot;\n&quot;, &quot;**Facts First:**&quot;, fcheck$factcheck_factsfirst[i], &quot;\n&quot;)
@@ -453,7 +439,66 @@ for (i in position){
 <p>“You have to remember this, are you ready? Because they give us a bum rap. Patients with preexisting conditions are protected by Republicans much more so than protected by Democrats who will never be able to pull it off.” – July 17 at Campaign Rally in Greenville, NC</p>
 <p><strong>Facts First:</strong> Democrats have already pulled it off: they installed protections for people with preexisting conditions in the Affordable Care Act, or Obamacare. Republicans, conversely, have repeatedly tried to weaken these protections.</p>
 <p>Trump’s administration and congressional Republicans have repeatedly put forward bills and lawsuits that would weaken Obamacare’s protections for people with preexisting conditions. Trump is supporting a Republican lawsuit that is seeking to get all of Obamacare declared void. He has not issued a plan to reinstate the law’s protections for people with preexisting conditions if the suit succeeds.</p>
-<p>asdfasdfasdf asdfasdfasdfasf</p>
+</div>
+<div id="omar-al-qaeda" class="section level3">
+<h3>Omar al Qaeda</h3>
+<p>“Omar laughed that Americans speak of al Qaeda in a menacing tone and remarked that, ‘You don’t say America with this intensity. You say al Qaeda – makes you proud. Al Qaeda makes you proud. You don’t speak that way about America.’” – July 17 at Campaign Rally in Greenville, NC</p>
+<p><strong>Facts First:</strong> Omar did not say that the terrorist organization al Qaeda makes her proud. Trump was inaccurately describing remarks she made in 2013 about how one of her college professors acted when he discussed al Qaeda.</p>
+<p>NA</p>
+</div>
+<div id="hispanics-want-the-wall" class="section level3">
+<h3>Hispanics want the wall</h3>
+<p>“Unemployment, among Hispanic Americans, where we’re doing really well. You know why? Because they want a strong border. They want it because they understand the border better than anybody. They want that strong border. They want that wall, that’s being built right now. They want that wall, and they really do. They understand the border better than anybody.” – July 17 at Campaign Rally in Greenville, NC</p>
+<p><strong>Facts First:</strong> A majority of Hispanics oppose Trump’s proposed border wall, polls show.</p>
+<p>In a Pew poll in 2018, 75% of Hispanics were opposed to expanding the border wall. In a Quinnipiac University poll in January, 66% of Hispanics were opposed to building a wall. (The questions were phrased slightly differently.) The wall is not “being built right now.” As of June, no new miles had been constructed. Trump said this spring that replacement fencing should be counted by the media as his “wall,” since he is replacing ineffective old barriers with effective modern ones. This is subjective, but we think it’s fair to focus on the new barriers he promised during his campaign.</p>
+</div>
+<div id="democrats-health-spending-illegal" class="section level3">
+<h3>Democrats health spending illegal</h3>
+<p>“The Democrats want to spend more money on health care for an illegal immigrant than they do for a citizen of the United States…Illegal aliens will be very nicely covered. How about California? They just approved $100 million. They just approved $100 million to take care of the needs of illegal immigrants.” – July 17 at Campaign Rally in Greenville, NC</p>
+<p><strong>Facts First:</strong> California did approve spending of about $100 million to provide Medicaid health coverage to low-income undocumented immigrants between the ages of 19 to 25. But there is no basis for the claim that Democrats want to spend “more” on health care for the undocumented than on citizens.</p>
+<p>Some Democrats, including most of the party’s presidential candidates, support offering health insurance to undocumented immigrants around the country. But they are proposing to treat undocumented people the same way citizens are treated, not better than citizens. And since there are many fewer undocumented immigrants than citizens – 10.5 million in 2017, according to Pew – the total cost of coverage would be much lower.</p>
+</div>
+<div id="trafficking-doesnt-happen-through-ports" class="section level3">
+<h3>Trafficking doesn’t happen through ports</h3>
+<p>“This is all over the world, human trafficking. It’s a terrible, terrible thing and we’re going to solve it. You know most of it comes through in this country, our southern border, where we don’t have the wall. They’re not going through our points, they’re not going through areas where we have security, where we have guards, where we have gates, where we have all sorts of equipment. No, they ride through the desert and they make a left, where you don’t have the wall. It’s so simple. Everybody knows it.” – July 17 at Campaign Rally in Greenville, NC</p>
+<p><strong>Facts First:</strong> Many human trafficking victims do indeed come through ports of entry, according to experts on trafficking and according to international data. Experts say that victims are more likely to be deceived into crossing the border willingly than kidnapped and put in the back of a vehicle.</p>
+<p>“I have worked on human trafficking on multiple continents in multiple countries for more than two decades, and in all the work that I’ve done with trafficking victims, I have met one who was actually kidnapped and thrown into a car,” Martina Vandenberg of the Human Trafficking Legal Center told CNN in January, when Trump was telling frequent stories about women being bound and gagged in cars. Many victims, experts say, are tricked into coming to the US with promises of a good job. Others are coerced through threats to their families or themselves. While experts say there may be some cases like the ones Trump has described, they emphasize that such cases are in a small minority. In 2018, the UN International Organization for Migration found that “in the last 10 years, almost 80% of journeys undertaken by victims trafficked internationally cross through official border points, such as airports and land border control points.”</p>
+</div>
+<div id="democrats-dont-want-to-do-anything-about-trafficking" class="section level3">
+<h3>Democrats don’t want to do anything about trafficking</h3>
+<p>“Human trafficking is the worst now throughout the world, because of the internet. It’s the worst that’s ever been. And the worst treated of all, children, but it’s women, women. The Democrats want to do nothing about it.” – July 17 at Campaign Rally in Greenville, NC</p>
+<p><strong>Facts First:</strong> It is false that Democrats want to “do nothing about” human trafficking. They have joined with Republicans in multiple Trump-era bills on the issue.</p>
+<p>Trump is arguing that Democrats don’t want to address trafficking because they oppose many of his immigration proposals, including a border wall. But that is not the same thing. House Democrats introduced and voted unanimously for the Put Trafficking Victims First Act of 2019 and voted overwhelmingly for the Republican-introduced Allow States and Victims to Fight Online Sex Trafficking Act of 2017. Presidential candidates Elizabeth Warren and Kirsten Gillibrand have both introduced legislation on human trafficking. Later in this same speech, Trump himself said Democrats have voted for recent human trafficking bills he has signed: “I’ve proudly signed four bipartisan human trafficking laws, securing $400 million to support victims of human trafficking.”</p>
+</div>
+<div id="democrats-all-wanted-a-wall" class="section level3">
+<h3>Democrats all wanted a wall</h3>
+<p>“No, they (human traffickers) ride through the desert and they make a left, where you don’t have the wall. It’s so simple. Everybody knows it. You know, the Democrats all know it because five years ago, before I was here, they all wanted it. Now they don’t want it. You know why they don’t want it? For political reasons.” – July 17 at Campaign Rally in Greenville, NC</p>
+<p><strong>Facts First:</strong> Some Democrats, but far from all, voted in 2006 to approve a fence on the Mexican border – a fence Trump himself said was much different than the wall he wanted.</p>
+<p>In the Senate, 26 Democrats (including Schumer and Clinton) voted yes on the Secure Fence Act, 17 voted no; in the House, it was 64 yes, 131 no. That isn’t close to unanimous support. The law was to authorize 700 miles of fencing. Trump himself said during the 2016 campaign that this fencing was not comparable to the giant concrete wall he was proposing: “It was such a little wall, it was such a nothing wall,” he told Fox News. Democrats also endorsed border fencing as part of the failed 2013 “Gang of Eight” comprehensive immigration reform bill. That, however, was part of a compromise package in which undocumented immigrants would be given a path to citizenship – so Democrats did not go from supporting a standalone fence proposal in 2013 to opposing that same kind of proposal.</p>
+</div>
+<div id="taking-away-guns" class="section level3">
+<h3>Taking away guns</h3>
+<p>“Ninth Congressional District: the Democrat in the race is an ultra-liberal named Dan McCready, wants to take away your guns. He wants to raise your taxes. He doesn’t care about borders. He likes open borders, and he really admires socialism.” – July 17 at Campaign Rally in Greenville, NC</p>
+<p><strong>Facts First:</strong> Trump’s claims about McCready were comprehensively inaccurate.</p>
+<p>McCready advocates additional gun control measures, but not taking away people’s guns. He is campaigning on tax cuts for “middle class families.” And he supports border security measures including “physical barriers.” McCready’s website says: “Dan will fight for common-sense and bipartisan gun violence prevention, comprehensive background checks, and closing the gun show and online loopholes that allow guns to fall into the hands of domestic terrorists, domestic abusers, and the mentally ill.” That isn’t close to “take away your guns.” McCready is calling for comprehensive immigration reform “that secures our border, respects our laws and protects our American values.” He says the border should be secured by using a mix of physical barriers and technology like drones and infrared cameras.</p>
+</div>
+<div id="rolls-royce-thing" class="section level3">
+<h3>Rolls-Royce thing</h3>
+<p>“You know, I joked, I said, ‘And everybody will get a free Rolls-Royce. Every family gets a free Rolls-Royce, every family.’ And the media said, ‘Donald Trump is exaggerating. He knows that they’re not getting a Rolls-Royce.’ I’m sorry. I’m sorry, I’m sorry. Don’t put it. Don’t put it. Don’t put it. Don’t put that I said free Rolls-Royce.” – July 17 at Campaign Rally in Greenville, NC</p>
+<p><strong>Facts First:</strong> That is not exactly what happened.</p>
+<p>Trump did make a joke at a 2018 campaign rally in Arizona about Democrats wanting to give undocumented immigrants a free Rolls-Royce – but then, at a rally the next day in Nevada, he made a non-joking claim that Democrats want to “give them cars.” He continued to joke about a Rolls-Royce in particular, but he was challenged on the assertion of fact. He said in Nevada: “They want to open your borders, let people in, illegally. And then they want to pay for those people for health care, for education. They want to give them cars, they want to give them driver’s licenses. I said last night, we did a great – we did a great, great rally in Arizona last night, and I said – I said last night, what kind of car will they supply them? Will it be a Rolls-Royce?”</p>
+</div>
+<div id="lowest-unemployment-ever" class="section level3">
+<h3>Lowest unemployment ever</h3>
+<p>“Think of it, we have the strongest economy in history. The lowest unemployment numbers ever.” – July 17 at Campaign Rally in Greenville, NC</p>
+<p><strong>Facts First:</strong> Particular minority groups are all near their lowest unemployment numbers ever, but the country as a whole is not.</p>
+<p>The June unemployment rate was 3.7%. Ignoring the months earlier in the year when it was slightly lower, that is the lowest rate since 1969, not the lowest rate of all time: 2.5% in 1953. Black, Asian and Hispanic Americans are at roughly their lowest unemployment rates since the government began tracking them using its current methodology (in the early 1970s for black and Hispanic Americans, 2000 for Asians), though the Asian and Hispanic rates were slightly lower earlier in the year.</p>
+</div>
+<div id="north-carolina-economy" class="section level3">
+<h3>North Carolina economy</h3>
+<p>“Trump, claiming that North Carolina”has had its best economic year in the history of your state,&quot; said “you have the lowest unemployment rate” and “your best unemployment numbers.” – July 17 at Campaign Rally in Greenville, NC</p>
+<p><strong>Facts First:</strong> North Carolina does not have either its lowest unemployment rate ever or the lowest unemployment rate in the country.</p>
+<p>Its rate in May was 4.1%, 38th of all states. The rate was slightly higher than it was a year prior, 4.0% in May 2018. The rate did drop from 4.2% to 3.7% over the course of 2018. North Carolina’s unemployment rate has been lower than 4.1% as recently as 2000. So this is a 19-year low (if you ignore previous Trump-era months when it was slightly lower than it is now), not a historic low.</p>
 <!-- ```{r pressure, echo=FALSE} -->
 <!-- plot(pressure) -->
 <!-- ``` -->
