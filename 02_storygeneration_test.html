@@ -372,34 +372,33 @@ summary {
 
 <!-- MANUAL ENTRY TEST -->
 <p><em>(Manually Added Content Below)</em></p>
-<div id="north-korea-and-south-korea" class="section level2">
-<h2>North Korea and South Korea</h2>
-<div id="remains-from-north-korea" class="section level4">
-<h4>Remains from North Korea</h4>
+<div id="north-korea-and-south-korea" class="section level1">
+<h1>North Korea and South Korea</h1>
+<div id="remains-from-north-korea" class="section level3">
+<h3>Remains from North Korea</h3>
 <p>“We got back, and we’re getting back, as we speak, we’re getting back a lot of our fallen heroes. You know that. They’re coming back into and through Hawaii.” – August 9 exchange with reporters</p>
 <p><strong>Facts First:</strong> <em>While North Korea returned some remains last year, it is no longer doing so. The US military announced in May that the remains program had been suspended for the rest of the 2019 fiscal year because North Korea had stopped communicating with the US agency responsible for the effort.</em></p>
 <p>Trump could accurately tout the return of remains in the past tense: North Korea returned 55 cases of possible remains in the summer of 2018. But the remains are no longer being returned. The Pentagon’s Defense POW/MIA Accounting Agency said in May that no more remains would be coming back this fiscal year. The agency said North Korea had not spoken with the agency at all since the Hanoi summit in February between Trump and Kim Jong Un, which ended abruptly.</p>
 <p>Trump could have correctly said that there has been recent progress in identifying remains from the cases returned last year. The week before Trump made these remarks, Vice President Mike Pence and the Defense POW/MIA Accounting Agency announced that 25 additional service members had been identified. Seven identifications had previously been announced.</p>
 </div>
-<div id="north-koreas-missile-testing" class="section level4">
-<h4>North Korea’s missile testing</h4>
+<div id="north-koreas-missile-testing" class="section level3">
+<h3>North Korea’s missile testing</h3>
 <p>“…I say it again: There have been no nuclear tests. The missile tests have all been short-range. No ballistic missile tests. No long-range missiles.” – August 9 exchange with reporters</p>
 <p><strong>Facts First:</strong> <em>North Korea has been testing ballistic missiles, though they have indeed been short-range.</em></p>
 <p>Trump, perhaps confused, appeared to be suggesting that only long-range missiles are “ballistic.” That is not true. The two short-range missiles it tested the week of Trump’s remarks were also ballistic missiles, as were the missiles it tested in late July.</p>
 </div>
-<div id="troops-in-south-korea" class="section level4">
-<h4>Troops in South Korea</h4>
+<div id="troops-in-south-korea" class="section level3">
+<h3>Troops in South Korea</h3>
 <p>“As you know, we’ve got 32,000 soldiers on South Korean soil, and we’ve been helping them for about 82 years.” – August 7 exchange with reporters</p>
 <p><strong>Facts First:</strong> <em>There were 29,048 US defense personnel in South Korea as of March, 25,884 of them active-duty personnel, according to the latest update from the military’s Defense Manpower Data Center.</em></p>
 <p>It was not clear what Trump meant by “82 years.” Korea was a unified country until the end of World War II in 1945, 74 years ago.</p>
 <!-- DATA GENERATED CONTENT -->
 <p><br> <br> <br> <em>(DATA Generated Content Below)</em></p>
 </div>
-</div>
 <div id="greenville-campaign-rally" class="section level2">
 <h2>Greenville Campaign Rally</h2>
-<div id="democrats-and-borders" class="section level4">
-<h4>Democrats and borders</h4>
+<div id="democrats-and-borders" class="section level3">
+<h3>Democrats and borders</h3>
 <p>“So if you don’t want Democrats to raid your health care, to steal away your money, to bankrupt your country, then you have a choice. You must vote Republican….You can’t say you love our country if you want to destroy it through open borders. Open borders are a disaster.” – July 17 at Campaign Rally in Greenville, NC</p>
 <p><strong>Facts First:</strong> <em>Some Democrats, including presidential candidates such as Elizabeth Warren and Julián Castro, have advocated a significant loosening of immigration law, including a decriminalization of the act of illegally crossing the border. But none of them have proposed literally opening the border to unrestricted migration.</em></p>
 <p>NA</p>
@@ -407,51 +406,60 @@ summary {
 <pre class="r"><code>headers &lt;- list(&quot;We&quot;,&quot;are&quot;,&quot;your&quot;,&quot;friends&quot;)
 
 for (i in headers){
-  cat(&quot;\n#### &quot;, i, &quot;\n&quot;)
+  cat(&quot;\n### &quot;, i, &quot;\n&quot;)
   cat(&quot;comment&quot;,i)
   cat(&quot;  \n&quot;)# &lt;---------------------------------
 }</code></pre>
 </div>
-<div id="we" class="section level4">
-<h4>We</h4>
+<div id="we" class="section level3">
+<h3>We</h3>
 <p>comment We</p>
 </div>
-<div id="are" class="section level4">
-<h4>are</h4>
+<div id="are" class="section level3">
+<h3>are</h3>
 <p>comment are</p>
 </div>
-<div id="your" class="section level4">
-<h4>your</h4>
+<div id="your" class="section level3">
+<h3>your</h3>
 <p>comment your</p>
 </div>
-<div id="friends" class="section level4">
-<h4>friends</h4>
+<div id="friends" class="section level3">
+<h3>friends</h3>
 <p>comment friends</p>
 <pre class="r"><code>position &lt;- list(1, 2, 3)
 
 for (i in position){
-  cat(&quot;\n## &quot;, fcheck$code_name[i], &quot;\n&quot;)
-  cat(fcheck$claim[i], &quot;--&quot;, format(fcheck$date[i], &#39;%B %d&#39;), &quot;at&quot;, fcheck$forum[i])
+  cat(&quot;\n### &quot;, fcheck$code_name[i], &quot;\n&quot;)
+  cat(fcheck$claim[i], &quot;--&quot;, format(fcheck$date[i], &#39;%B %d&#39;), &quot;at&quot;, fcheck$forum[i], &quot;\n&quot;)
+  cat(&quot;\n&quot;, &quot;**Facts First:**&quot;, fcheck$factcheck_factsfirst[i], &quot;\n&quot;)
+  cat(&quot;\n&quot;, fcheck$factcheck_moretext[i])
   cat(&quot;  \n&quot;)
 }</code></pre>
 </div>
-</div>
-<div id="democrats-and-borders-1" class="section level2">
-<h2>Democrats and borders</h2>
+<div id="democrats-and-borders-1" class="section level3">
+<h3>Democrats and borders</h3>
 <p>“So if you don’t want Democrats to raid your health care, to steal away your money, to bankrupt your country, then you have a choice. You must vote Republican….You can’t say you love our country if you want to destroy it through open borders. Open borders are a disaster.” – July 17 at Campaign Rally in Greenville, NC</p>
+<p><strong>Facts First:</strong> Some Democrats, including presidential candidates such as Elizabeth Warren and Julián Castro, have advocated a significant loosening of immigration law, including a decriminalization of the act of illegally crossing the border. But none of them have proposed literally opening the border to unrestricted migration.</p>
+<p>NA</p>
 </div>
-<div id="empty-seats" class="section level2">
-<h2>Empty seats</h2>
+<div id="empty-seats" class="section level3">
+<h3>Empty seats</h3>
 <p>“We haven’t had an empty seat in any event, I don’t believe, that we’ve ever been to. I don’t think, we’ve ever had – we’ve always had people – we haven’t had an empty seat.” – July 17 at Campaign Rally in Greenville, NC</p>
+<p><strong>Facts First:</strong> There were empty seats at this very rally.</p>
+<p>There have also been empty seats at various other Trump events. Bloomberg News reporter Josh Wingrove tweeted a photo of what he described as a “smattering” of empty seats in the almost-full 8,000-capacity venue. The Dallas News said of Trump’s October 18 rally in Houston: “Many hundreds of seats were empty, including all of the boxes on both tiers of the mezzanine.” At Trump’s Harrisburg, Pennsylvania, rally in April 2017, Philadelphia Inquirer journalist Jonathan Tamari tweeted a photo of rows of empty seats in the upper deck.</p>
 </div>
-<div id="preexisting-conditions" class="section level2">
-<h2>Preexisting conditions</h2>
+<div id="preexisting-conditions" class="section level3">
+<h3>Preexisting conditions</h3>
 <p>“You have to remember this, are you ready? Because they give us a bum rap. Patients with preexisting conditions are protected by Republicans much more so than protected by Democrats who will never be able to pull it off.” – July 17 at Campaign Rally in Greenville, NC</p>
+<p><strong>Facts First:</strong> Democrats have already pulled it off: they installed protections for people with preexisting conditions in the Affordable Care Act, or Obamacare. Republicans, conversely, have repeatedly tried to weaken these protections.</p>
+<p>Trump’s administration and congressional Republicans have repeatedly put forward bills and lawsuits that would weaken Obamacare’s protections for people with preexisting conditions. Trump is supporting a Republican lawsuit that is seeking to get all of Obamacare declared void. He has not issued a plan to reinstate the law’s protections for people with preexisting conditions if the suit succeeds.</p>
 <p>asdfasdfasdf asdfasdfasdfasf</p>
 <!-- ```{r pressure, echo=FALSE} -->
 <!-- plot(pressure) -->
 <!-- ``` -->
 <!-- Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot. -->
+</div>
+</div>
 </div>
 
 

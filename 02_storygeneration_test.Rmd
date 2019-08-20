@@ -86,9 +86,9 @@ fcheck$source_article <- str_remove(fcheck$source_article, "<a href='' target='_
 
 *(Manually Added Content Below)*
 
-## North Korea and South Korea
+# North Korea and South Korea
 
-#### Remains from North Korea
+### Remains from North Korea
 
 "We got back, and we're getting back, as we speak, we're getting back a lot of our fallen heroes. You know that. They're coming back into and through Hawaii." -- August 9 exchange with reporters
 
@@ -98,7 +98,7 @@ Trump could accurately tout the return of remains in the past tense: North Korea
 
 Trump could have correctly said that there has been recent progress in identifying remains from the cases returned last year. The week before Trump made these remarks, Vice President Mike Pence and the Defense POW/MIA Accounting Agency announced that 25 additional service members had been identified. Seven identifications had previously been announced.
 
-#### North Korea's missile testing
+### North Korea's missile testing
 
 "...I say it again: There have been no nuclear tests. The missile tests have all been short-range. No ballistic missile tests. No long-range missiles." -- August 9 exchange with reporters
 
@@ -106,7 +106,7 @@ Trump could have correctly said that there has been recent progress in identifyi
 
 Trump, perhaps confused, appeared to be suggesting that only long-range missiles are "ballistic." That is not true. The two short-range missiles it tested the week of Trump's remarks were also ballistic missiles, as were the missiles it tested in late July.
 
-#### Troops in South Korea
+### Troops in South Korea
 
 "As you know, we've got 32,000 soldiers on South Korean soil, and we've been helping them for about 82 years." -- August 7 exchange with reporters
 
@@ -125,7 +125,7 @@ It was not clear what Trump meant by "82 years." Korea was a unified country unt
 
 ## Greenville Campaign Rally
 
-#### `r fcheck$code_name[1]`
+### `r fcheck$code_name[1]`
 
 `r fcheck$claim[1]` -- `r format(fcheck$date[1], '%B %d')` at `r fcheck$forum[1]`
 
@@ -140,7 +140,7 @@ It was not clear what Trump meant by "82 years." Korea was a unified country unt
 headers <- list("We","are","your","friends")
 
 for (i in headers){
-  cat("\n#### ", i, "\n")
+  cat("\n### ", i, "\n")
   cat("comment",i)
   cat("  \n")# <---------------------------------
 }
@@ -153,8 +153,10 @@ for (i in headers){
 position <- list(1, 2, 3)
 
 for (i in position){
-  cat("\n## ", fcheck$code_name[i], "\n")
-  cat(fcheck$claim[i], "--", format(fcheck$date[i], '%B %d'), "at", fcheck$forum[i])
+  cat("\n### ", fcheck$code_name[i], "\n")
+  cat(fcheck$claim[i], "--", format(fcheck$date[i], '%B %d'), "at", fcheck$forum[i], "\n")
+  cat("\n", "**Facts First:**", fcheck$factcheck_factsfirst[i], "\n")
+  cat("\n", fcheck$factcheck_moretext[i])
   cat("  \n")
 }
 
