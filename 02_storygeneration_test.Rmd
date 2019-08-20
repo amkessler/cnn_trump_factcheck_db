@@ -20,10 +20,10 @@ library(readxl)
 library(writexl)
 
 raw_data <- read_excel("TRUMP FACT-CHECKS.xlsx", 
-    sheet = "ak", col_types = c("date", "text", 
+    sheet = "ak_forstorytest", col_types = c("date", 
         "text", "text", "text", "text", "text", 
         "text", "text", "text", "text", "text", 
-        "text", "text"))
+        "text", "text", "numeric", "text"))
 
 glimpse(raw_data)
 
@@ -39,7 +39,7 @@ fcheck <- fcheck %>%
     kind_of_forum = str_trim(str_to_upper(kind_of_forum)),
     location = str_trim(str_to_upper(location)),
     state = str_trim(str_to_upper(state)),
-    code_name = str_trim(str_to_upper(code_name)),
+    # code_name = str_trim(str_to_upper(code_name)),
     category_tag1 = str_trim(str_to_upper(category_tag1)),
     category_tag2 = str_trim(str_to_upper(category_tag2)),
     category_tag3 = str_trim(str_to_upper(category_tag3)),
@@ -51,10 +51,6 @@ fcheck <- fcheck %>%
     day_of_week = weekdays(date, abbreviate = T),
     isoweek = isoweek(date) #isoweek starts on MONDAYS
   )
-
-
-# fcheck <- readRDS("saved_versions/fcheck_saved.rds")
-
 
 # filter out where dates are missing
 fcheck <- fcheck %>% 
@@ -116,19 +112,29 @@ Trump, perhaps confused, appeared to be suggesting that only long-range missiles
 
 **Facts First:** *There were 29,048 US defense personnel in South Korea as of March, 25,884 of them active-duty personnel, according to the latest update from the military's Defense Manpower Data Center.*
 
-It was not clear what Trump meant by "82 years." Korea was a unified country until the end of World War II in 1945, 74 years ago.
-South Korea's payments
+It was not clear what Trump meant by "82 years." Korea was a unified country until the end of World War II in 1945, 74 years ago.  
+
+
+
+
+<!-- DATA GENERATED CONTENT -->
+
+*(DATA Generated Content Below)* 
+
+## Greenville Campaign Rally
+
+#### `r fcheck$code_name[1]`
 
 
 
 
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+<!-- ```{r pressure, echo=FALSE} -->
+<!-- plot(pressure) -->
+<!-- ``` -->
+
+<!-- Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot. -->
