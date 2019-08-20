@@ -125,30 +125,16 @@ It was not clear what Trump meant by "82 years." Korea was a unified country unt
 
 ## Greenville Campaign Rally
 
-### `r fcheck$code_name[1]`
+<!-- ### `r fcheck$code_name[1]` -->
 
-`r fcheck$claim[1]` -- `r format(fcheck$date[1], '%B %d')` at `r fcheck$forum[1]`
+<!-- `r fcheck$claim[1]` -- `r format(fcheck$date[1], '%B %d')` at `r fcheck$forum[1]` -->
 
-**Facts First:** *`r fcheck$factcheck_factsfirst[1]`*
+<!-- **Facts First:** *`r fcheck$factcheck_factsfirst[1]`* -->
 
-`r fcheck$factcheck_moretext[1]`
-
-
-<!-- sample loop for markdown formatting https://stackoverflow.com/questions/17178831/generate-markdown-comments-within-for-loop -->
-
-<!-- ```{r, results='asis'} -->
-<!-- headers <- list("We","are","your","friends") -->
-
-<!-- for (i in headers){ -->
-<!--   cat("\n### ", i, "\n") -->
-<!--   cat("comment",i) -->
-<!--   cat("  \n")# <--------------------------------- -->
-<!-- } -->
-
-<!-- ``` -->
+<!-- `r fcheck$factcheck_moretext[1]` -->
 
 
-```{r testloop, results='asis'}
+```{r testloop, results='asis', echo=FALSE}
 
 lastnum <- nrow(fcheck)
 numlist <- as.list(seq(1,lastnum))
@@ -165,13 +151,3 @@ for (i in numlist){
 
 
 
-
-
-
-
-
-<!-- ```{r pressure, echo=FALSE} -->
-<!-- plot(pressure) -->
-<!-- ``` -->
-
-<!-- Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot. -->
