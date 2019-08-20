@@ -1,0 +1,63 @@
+---
+title: "test page"
+author: ""
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# using this as source format: https://www.cnn.com/2019/08/14/politics/weekly-fact-check-donald-trump-21-false/index.html
+
+Sys.Date()
+
+```
+
+
+<!-- MANUAL ENTRY TEST -->
+
+*(Manually Added Content Below)*
+
+## North Korea and South Korea
+
+#### Remains from North Korea
+
+"We got back, and we're getting back, as we speak, we're getting back a lot of our fallen heroes. You know that. They're coming back into and through Hawaii." -- August 9 exchange with reporters
+
+**Facts First:** *While North Korea returned some remains last year, it is no longer doing so. The US military announced in May that the remains program had been suspended for the rest of the 2019 fiscal year because North Korea had stopped communicating with the US agency responsible for the effort.*
+
+Trump could accurately tout the return of remains in the past tense: North Korea returned 55 cases of possible remains in the summer of 2018. But the remains are no longer being returned. The Pentagon's Defense POW/MIA Accounting Agency said in May that no more remains would be coming back this fiscal year. The agency said North Korea had not spoken with the agency at all since the Hanoi summit in February between Trump and Kim Jong Un, which ended abruptly.
+
+Trump could have correctly said that there has been recent progress in identifying remains from the cases returned last year. The week before Trump made these remarks, Vice President Mike Pence and the Defense POW/MIA Accounting Agency announced that 25 additional service members had been identified. Seven identifications had previously been announced.
+
+#### North Korea's missile testing
+
+"...I say it again: There have been no nuclear tests. The missile tests have all been short-range. No ballistic missile tests. No long-range missiles." -- August 9 exchange with reporters
+
+**Facts First:** *North Korea has been testing ballistic missiles, though they have indeed been short-range.*
+
+Trump, perhaps confused, appeared to be suggesting that only long-range missiles are "ballistic." That is not true. The two short-range missiles it tested the week of Trump's remarks were also ballistic missiles, as were the missiles it tested in late July.
+
+#### Troops in South Korea
+
+"As you know, we've got 32,000 soldiers on South Korean soil, and we've been helping them for about 82 years." -- August 7 exchange with reporters
+
+**Facts First:** *There were 29,048 US defense personnel in South Korea as of March, 25,884 of them active-duty personnel, according to the latest update from the military's Defense Manpower Data Center.*
+
+It was not clear what Trump meant by "82 years." Korea was a unified country until the end of World War II in 1945, 74 years ago.
+South Korea's payments
+
+
+
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
