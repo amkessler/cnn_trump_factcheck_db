@@ -100,6 +100,9 @@ fcheck$source_article <- fcheck$source_article %>% replace_na("")
 #convert link to html hyperlink format
 fcheck$source_article <- paste0("<a href='", fcheck$source_article, "' target='_blank'>", fcheck$source_article, "</a>")
 
+#clean up empty hyperlinks
+fcheck$source_article <- str_remove(fcheck$source_article, "<a href='' target='_blank'></a>")
+
 
 #create table of JUST THE MOST RECENT MON-SUN WEEK's checks #### ------------------
 dates <- today()
