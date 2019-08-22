@@ -8,7 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-# using this as source format: https://www.cnn.com/2019/08/14/politics/weekly-fact-check-donald-trump-21-false/index.html
+# using this as format template: https://www.cnn.com/2019/08/14/politics/weekly-fact-check-donald-trump-21-false/index.html
 
 library(tidyverse)
 library(lubridate)
@@ -124,15 +124,6 @@ It was not clear what Trump meant by "82 years." Korea was a unified country unt
 *(DATA Generated Content Below)* 
 
 ## Greenville Campaign Rally
-
-<!-- ### `r fcheck$code_name[1]` -->
-
-<!-- `r fcheck$claim[1]` -- `r format(fcheck$date[1], '%B %d')` at `r fcheck$forum[1]` -->
-
-<!-- **Facts First:** *`r fcheck$factcheck_factsfirst[1]`* -->
-
-<!-- `r fcheck$factcheck_moretext[1]` -->
-
 
 ```{r fcloop, results='asis', echo=FALSE}
 
