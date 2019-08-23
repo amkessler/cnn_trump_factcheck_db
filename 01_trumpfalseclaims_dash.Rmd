@@ -32,8 +32,8 @@ library(readxl)
 library(writexl)
 
 
-raw_data <- read_excel("TRUMP FACT-CHECKS.xlsx", 
-    sheet = "ak", col_types = c("date", "text", 
+raw_data <- read_excel("DALE TRUMP FACT CHECKS.xlsx", sheet = "ak",
+    col_types = c("date", "text", "text", 
         "text", "text", "text", "text", "text", 
         "text", "text", "text", "text", "text", 
         "text", "text"))
@@ -92,7 +92,10 @@ fcheck$category_tag5 <- fcheck$category_tag5 %>% replace_na("")
 fcheck$code_name <- fcheck$code_name %>% replace_na("")
 
 #create combined column with all category tags together in one
-fcheck$category_combined <- paste0(fcheck$category_tag1, " ", fcheck$category_tag2, " ", fcheck$category_tag3, " ", fcheck$category_tag4, " ", fcheck$category_tag5)
+fcheck$category_combined <- paste0(fcheck$category_tag1, "; ", fcheck$category_tag2, "; ", fcheck$category_tag3, "; ", fcheck$category_tag4, "; ", fcheck$category_tag5)
+
+#clean up extra trailing semicolons at end of combined tag column
+fcheck$category_combined <- str_trim(gsub("[; ]*$", "", fcheck$category_combined))
 
 # remove NAs from link column 
 fcheck$source_article <- fcheck$source_article %>% replace_na("")
@@ -289,6 +292,40 @@ count_code_name <- fcheck %>%
 #save copy in case needed
 write_xlsx(fcheck, "saved_versions/fcheck_temp.xlsx")
 
+zzz <- fcheck %>% 
+  count(code_name, category_combined)
+
+write_xlsx(zzz, "saved_versions/codelisttoclean.xlsx")
+
+
+#an unique id to fcheck
+fcheck <- rowid_to_column(fcheck, "recno")
+
+#manual cleaning and then bringing back in to join
+codelisttoclean_joinlist <- read_excel("saved_versions/codelisttoclean_joinlist.xlsx")
+
+codelist_un <- codelisttoclean_joinlist %>% unique()
+
+ztemp <- anti_join(fcheck, codelisttoclean_joinlist)
+
+keeptemp<- inner_join(fcheck, codelisttoclean_joinlist)
+
+alltemp <- bind_rows(keeptemp, ztemp)
+
+recnos <- alltemp %>% 
+  count(recno) %>% 
+  arrange(desc(n))
+
+write_xlsx(alltemp, "saved_versions/alltemp_codejoins.xlsx")
+
+fcheck <- alltemp
+
+write_xlsx(fcheck, "saved_versions/fcheck_fortransfer.xlsx")
+
+finalcount <- fcheck %>% 
+  count(code_name, cleaned_category_combined)
+
+write_xlsx(finalcount, "saved_versions/codelist_forlookup.xlsx")
 
 # set time object set to eastern time
 d <- Sys.Date()
