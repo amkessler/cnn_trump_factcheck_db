@@ -1,0 +1,1126 @@
+---
+title: "Trump False Claims Project"
+# resource_files:
+# - .httr-oauth
+output:
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+    # theme: yeti
+
+---
+
+```{r setup, include=FALSE}
+
+library(flexdashboard)
+library(tidyverse)
+library(lubridate)
+library(janitor)
+library(glue)
+library(plotly)
+library(DT)
+library(googlesheets)
+library(kableExtra)
+library(leaflet)
+# library(ggmap)
+library(RColorBrewer)
+library(htmlwidgets)
+library(htmltools)
+library(tigris)
+options(tigris_class = "sf")
+library(readxl)
+library(writexl)
+
+
+raw_data <- read_excel("DALE TRUMP FACT CHECKS.xlsx", sheet = "ak",
+    col_types = c("date", "text", "text", 
+        "text", "text", "text", "text", "text", 
+        "text", "text", "text", "text", "text", 
+        "text", "text"))
+
+glimpse(raw_data)
+
+#clean column names
+fcheck <- raw_data %>%
+  clean_names()
+
+names(fcheck)
+
+#set formatting of certain columns and break out dates into own columns
+fcheck <- fcheck %>%
+  mutate(
+    kind_of_forum = str_trim(str_to_upper(kind_of_forum)),
+    location = str_trim(str_to_upper(location)),
+    state = str_trim(str_to_upper(state)),
+    code_name = str_trim(str_to_upper(code_name)),
+    category_tag1 = str_trim(str_to_upper(category_tag1)),
+    category_tag2 = str_trim(str_to_upper(category_tag2)),
+    category_tag3 = str_trim(str_to_upper(category_tag3)),
+    category_tag4 = str_trim(str_to_upper(category_tag4)),
+    category_tag5 = str_trim(str_to_upper(category_tag5)),
+    year = year(date),
+    month = month(date),
+    day = day(date),
+    day_of_week = weekdays(date, abbreviate = T),
+    isoweek = isoweek(date) #isoweek starts on MONDAYS
+  )
+
+
+# fcheck <- readRDS("saved_versions/fcheck_saved.rds")
+
+
+# filter out where dates are missing
+fcheck <- fcheck %>% 
+  filter(!is.na(date))
+
+
+
+#convert certain columns to factors for DT table filter capability
+fcheck <- fcheck %>% 
+  mutate(
+    kind_of_forum = as.factor(kind_of_forum),
+    location = as.factor(location),
+    state = as.factor(state)
+  )
+
+# remove NAs from category columns 
+fcheck$category_tag1 <- fcheck$category_tag1 %>% replace_na("")
+fcheck$category_tag2 <- fcheck$category_tag2 %>% replace_na("")
+fcheck$category_tag3 <- fcheck$category_tag3 %>% replace_na("")
+fcheck$category_tag4 <- fcheck$category_tag4 %>% replace_na("")
+fcheck$category_tag5 <- fcheck$category_tag5 %>% replace_na("")
+fcheck$code_name <- fcheck$code_name %>% replace_na("")
+
+#create combined column with all category tags together in one
+fcheck$category_combined <- paste0(fcheck$category_tag1, "; ", fcheck$category_tag2, "; ", fcheck$category_tag3, "; ", fcheck$category_tag4, "; ", fcheck$category_tag5)
+
+#clean up extra trailing semicolons at end of combined tag column
+fcheck$category_combined <- str_trim(gsub("[; ]*$", "", fcheck$category_combined))
+
+# remove NAs from link column 
+fcheck$source_article <- fcheck$source_article %>% replace_na("")
+
+#convert link to html hyperlink format
+fcheck$source_article <- paste0("<a href='", fcheck$source_article, "' target='_blank'>", fcheck$source_article, "</a>")
+
+#clean up empty hyperlinks
+fcheck$source_article <- str_remove(fcheck$source_article, "<a href='' target='_blank'></a>")
+
+
+#create table of JUST THE MOST RECENT MON-SUN WEEK's checks #### ------------------
+dates <- today()
+
+weekdays(dates)
+
+wdays <- setNames(0:6, c("Monday", "Tuesday", "Wednesday",
+                         "Thursday", "Friday", "Saturday", "Sunday"))
+
+weekdays(dates - wdays[weekdays(dates)])
+
+#find previous SUN date
+most_recent_sunday <- dates - match(weekdays(dates), c("Monday", "Tuesday", "Wednesday", 
+                                 "Thursday", "Friday", "Saturday", "Sunday"))
+
+#calculate Monday before that Sunday
+monday_before_recent_sunday <- most_recent_sunday - 6
+
+#now let's try to use this to filter our dates from the table
+fcheck_PREVWEEK <- fcheck %>%
+  filter(date <= most_recent_sunday,
+         date >= monday_before_recent_sunday) 
+
+#formatted dates for text output string
+monday_formatted <- format(monday_before_recent_sunday, "%a %b %d")
+sunday_formatted <- format(most_recent_sunday, "%a %b %d")
+
+week_range_string <- glue("week of {monday_formatted} to {sunday_formatted}")
+
+
+
+
+# COUNTS #### ---------------------------------------------------------------------
+
+#total count
+count_total <- fcheck %>% 
+  nrow()
+
+#total count - previous week only
+count_prevweek_total <- fcheck_PREVWEEK %>% 
+  nrow()
+
+
+#kind of forum count
+count_forum_kind <- fcheck %>% 
+  count(kind_of_forum) 
+
+#kind of forum - previous week only
+count_prevweek_forum <- fcheck_PREVWEEK %>% 
+  count(forum) 
+
+
+#top kind of forum 
+top_forum_kind <- fcheck %>% 
+  count(kind_of_forum) %>% 
+  arrange(desc(n)) %>% 
+  head(1) %>% 
+  select(kind_of_forum) %>% 
+  pull() %>% 
+  str_to_title()
+
+#top kind of forum - previous week only
+top_prevweek_forum_kind <- fcheck_PREVWEEK %>% 
+  count(kind_of_forum) %>% 
+  arrange(desc(n)) %>% 
+  head(1) %>% 
+  select(kind_of_forum) %>% 
+  pull() %>% 
+  str_to_title()
+
+
+#top forum 
+top_forum <- fcheck %>% 
+  count(forum) %>% 
+  arrange(desc(n)) %>% 
+  head(1) %>% 
+  select(forum) %>% 
+  pull() %>% 
+  str_to_title()
+
+#top forum - previous week only
+top_prevweek_forum <- fcheck_PREVWEEK %>% 
+  count(forum) %>% 
+  arrange(desc(n)) %>% 
+  head(1) %>% 
+  select(forum) %>% 
+  pull() %>% 
+  str_to_title()
+
+
+
+### count up subject categories stretching across four data columns #### --------------------
+tag1 <- fcheck %>% 
+  select(tag = category_tag1)
+
+tag2 <- fcheck %>% 
+  select(tag = category_tag2)
+
+tag3 <- fcheck %>% 
+  select(tag = category_tag3)
+
+tag4 <- fcheck %>% 
+  select(tag = category_tag4)
+
+tag5 <- fcheck %>% 
+  select(tag = category_tag5)
+
+#combine into one
+tag_combined <- bind_rows(tag1, tag2, tag3, tag4, tag5)
+
+#filter out NAs and blanks
+tag_combined <- tag_combined %>% 
+  filter(!is.na(tag), tag != "") 
+
+category_tag_count <- tag_combined %>% 
+  count(tag) %>% 
+  arrange(desc(n))
+
+
+### Now the same for PREV WEEK ONLY
+tag1b <- fcheck_PREVWEEK %>% 
+  select(tag = category_tag1)
+
+tag2b <- fcheck_PREVWEEK %>% 
+  select(tag = category_tag2)
+
+tag3b <- fcheck_PREVWEEK %>% 
+  select(tag = category_tag3)
+
+tag4b <- fcheck_PREVWEEK %>% 
+  select(tag = category_tag4)
+
+tag5b <- fcheck_PREVWEEK %>% 
+  select(tag = category_tag5)
+
+#combine into one
+tag_combined_oneweek <- bind_rows(tag1b, tag2b, tag3b, tag4b, tag5b)
+
+#filter out NAs
+tag_combined_PREVWEEK <- tag_combined_oneweek %>% 
+  filter(!is.na(tag), tag != "") 
+
+category_tag_PREVWEEK_count <- tag_combined_PREVWEEK %>% 
+  count(tag) %>% 
+  arrange(desc(n))
+
+
+#subject count - all
+subject_count <- category_tag_count %>% 
+  nrow()
+
+#subject count - previous week only
+subject_count_PREVWEEK <- category_tag_PREVWEEK_count %>% 
+  nrow()
+
+
+
+### count up coce_name variations #### --------------------
+
+#top kind of code name - previous week only
+top_prevweek_code_name <- fcheck_PREVWEEK %>% 
+  filter(code_name != "") %>% 
+  count(code_name) %>% 
+  arrange(desc(n)) %>% 
+  head(1) %>% 
+  select(code_name) %>% 
+  pull() %>% 
+  str_to_title()
+
+#number of code names from previous week
+count_prevweek_code_name <- fcheck_PREVWEEK %>% 
+  filter(code_name != "") %>% 
+  count(code_name) %>% 
+  nrow()
+
+#number of all code names 
+count_code_name <- fcheck %>% 
+  filter(code_name != "") %>% 
+  count(code_name) %>% 
+  nrow()
+
+
+ 
+#save copy in case needed
+write_xlsx(fcheck, "saved_versions/fcheck_temp.xlsx")
+
+zzz <- fcheck %>% 
+  count(code_name, category_combined)
+
+write_xlsx(zzz, "saved_versions/codelisttoclean.xlsx")
+
+
+#an unique id to fcheck
+fcheck <- rowid_to_column(fcheck, "recno")
+
+#manual cleaning and then bringing back in to join
+codelisttoclean_joinlist <- read_excel("saved_versions/codelisttoclean_joinlist.xlsx")
+
+codelist_un <- codelisttoclean_joinlist %>% unique()
+
+ztemp <- anti_join(fcheck, codelisttoclean_joinlist)
+
+keeptemp<- inner_join(fcheck, codelisttoclean_joinlist)
+
+alltemp <- bind_rows(keeptemp, ztemp)
+
+recnos <- alltemp %>% 
+  count(recno) %>% 
+  arrange(desc(n))
+
+write_xlsx(alltemp, "saved_versions/alltemp_codejoins.xlsx")
+
+fcheck <- alltemp
+
+write_xlsx(fcheck, "saved_versions/fcheck_fortransfer.xlsx")
+
+finalcount <- fcheck %>% 
+  count(code_name, cleaned_category_combined)
+
+write_xlsx(finalcount, "saved_versions/codelist_forlookup.xlsx")
+
+# set time object set to eastern time
+d <- Sys.Date()
+# d <- .POSIXct(d, "EST")
+  
+t <- Sys.time()
+# t <- .POSIXct(t, "EST")
+
+```
+
+
+Searchable Database 
+===================================== 
+Trump false claims compiled by CNN. To **filter** the list, click on the boxes above the columns. To **sort**, click on the arrows by the column names. To **search globally** by keywords, use the search box on the right. 
+(Last updated on `r format(t, format="%B %d %I:%M %p %Z")`)
+
+
+Row 
+-----------------------------------------------------------------------
+
+### {data-width=800}
+
+```{r searchable_table}
+
+#searchable table
+
+fcheck_table <- fcheck %>% 
+  select(date,
+         kind_of_forum,
+         forum,
+         location,
+         state,
+         claim,
+         fact_check,
+         category_combined,
+         code_name,
+         source_article
+) %>% 
+  arrange(desc(date))
+
+datatable(fcheck_table, 
+          rownames = FALSE, 
+          filter = "top",
+          escape = FALSE,
+          options = list(searchHighlight = TRUE)) %>% 
+  formatDate('date', 'toDateString') %>% 
+  formatStyle('claim', fontStyle = 'italic')
+
+
+```
+
+
+
+Summary Counts (Most Recent Week) 
+===================================== 
+Aggregate counts of all Trump false claims made over the **`r week_range_string`**. 
+
+
+Row {data-height=200}
+-----------------------------------------------------------------------
+
+### Number of false claims for the week
+
+```{r }
+
+tot <- count_prevweek_total
+
+valueBox(tot, icon = "fa-pencil", color = "blue")
+
+
+```
+
+### Number of forums for the week
+
+```{r}
+
+num_forums <- count_prevweek_forum %>% 
+  filter(!is.na(forum)) %>% 
+  nrow()
+
+valueBox(num_forums, icon = "fa-users", color = "green")
+
+
+```
+
+### Number of subjects for the week 
+
+```{r}
+
+valueBox(subject_count_PREVWEEK, icon = "fa-book", color = "darkred")
+
+
+
+```
+
+
+### Number of code names for the week 
+
+```{r}
+
+valueBox(count_prevweek_code_name, icon = "fa-book", color = "purple")
+
+
+
+```
+
+
+
+Row {data-height=800}
+-----------------------------------------------------------------------
+
+
+### Top daily totals
+
+```{r}
+
+bydate <- fcheck_PREVWEEK %>%
+  count(date) %>% 
+  head() %>% 
+  ungroup() 
+
+
+d <- ggplot(data = bydate, aes(x = reorder(date, -n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "lightblue") +
+  # coord_flip() +
+  theme_minimal()
+
+d2 <- d + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+dd <- ggplotly(d2)
+
+dd_nomenu <- dd %>% config(displayModeBar = FALSE)
+dd_nomenu
+
+# ggplot(corr.m, aes(x = reorder(miRNA, -value), y = value, fill = variable)) +
+#   geom_bar(stat = "identity")
+
+```
+
+
+### Top forums
+
+```{r}
+
+byforum <- fcheck_PREVWEEK %>%
+  filter(!is.na(forum)) %>% 
+  count(forum) %>%
+  arrange(desc(n)) %>%
+  head() %>%
+  ungroup()
+
+
+e <- ggplot(data = byforum, aes(x = reorder(forum, -n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "#A8E9A8") +
+  # coord_flip() +
+  theme_minimal()
+
+e2 <- e + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ee <- ggplotly(e2)
+
+ee_nomenu <- ee %>% config(displayModeBar = FALSE)
+ee_nomenu
+
+
+```
+
+
+### Top subjects
+
+```{r}
+
+bysubject <- category_tag_PREVWEEK_count %>% 
+  filter(tag != "") %>% 
+  head()
+
+
+e <- ggplot(data = bysubject, aes(x = reorder(tag, -n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "#f4a8a7") +
+  # coord_flip() +
+  theme_minimal()
+
+e2 <- e + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ee <- ggplotly(e2)
+
+ee_nomenu <- ee %>% config(displayModeBar = FALSE)
+ee_nomenu
+
+
+```
+
+
+### Top code names
+
+```{r}
+
+bycodename <- fcheck_PREVWEEK %>% 
+  filter(code_name != "") %>% 
+  count(code_name) %>% 
+  ungroup() %>% 
+  head()
+
+
+
+g <- ggplot(data = bycodename, aes(x = reorder(code_name, -n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "#DA85E8") +
+  # coord_flip() +
+  theme_minimal()
+
+g2 <- g + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(breaks = function(x) unique(floor(pretty(seq(0, (max(x) + 1) * 1.1)))))
+
+gg <- ggplotly(g2)
+
+gg_nomenu <- gg %>% config(displayModeBar = FALSE)
+gg_nomenu
+
+
+```
+
+
+
+
+
+Summary Counts (All) 
+===================================== 
+Aggregate counts of *all* Trump false claims compiled by CNN **since `r format(min(fcheck$date), "%a %b %d")`**
+
+
+Row {data-height=200}
+-----------------------------------------------------------------------
+
+### Number of all false claims 
+
+```{r count_total_box}
+
+tot <- count_total
+
+valueBox(tot, icon = "fa-pencil", color = "blue")
+
+
+```
+
+### Number of all forum types
+
+```{r}
+
+num_forums <- count_forum_kind %>% 
+  nrow()
+
+valueBox(num_forums, icon = "fa-users", color = "green")
+
+
+```
+
+### Number of all subjects 
+
+```{r}
+
+valueBox(subject_count, icon = "fa-book", color = "darkred")
+
+
+
+```
+
+
+### Number of all code names 
+
+```{r}
+
+valueBox(count_code_name, icon = "fa-book", color = "purple")
+
+
+
+```
+
+
+
+
+Row {data-height=800}
+-----------------------------------------------------------------------
+
+
+### Top daily totals
+
+```{r}
+
+bydate <- fcheck %>%
+  count(date) %>% 
+  arrange(desc(n)) %>%
+  head() %>% 
+  ungroup() 
+
+
+d <- ggplot(data = bydate, aes(x = reorder(date, -n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "lightblue") +
+  # coord_flip() +
+  theme_minimal()
+
+d2 <- d + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+dd <- ggplotly(d2)
+
+dd_nomenu <- dd %>% config(displayModeBar = FALSE)
+dd_nomenu
+
+# ggplot(corr.m, aes(x = reorder(miRNA, -value), y = value, fill = variable)) +
+#   geom_bar(stat = "identity")
+
+```
+
+
+### Top forum types
+
+```{r}
+
+byforumtype <- fcheck %>%
+  count(kind_of_forum) %>%
+  arrange(desc(n)) %>%
+  head() %>%
+  ungroup()
+
+e <- ggplot(data = byforumtype, aes(x = reorder(kind_of_forum, -n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "#A8E9A8") +
+  # coord_flip() +
+  theme_minimal()
+
+e2 <- e + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ee <- ggplotly(e2)
+
+ee_nomenu <- ee %>% config(displayModeBar = FALSE)
+ee_nomenu
+
+
+```
+
+
+### Top subjects
+
+```{r}
+
+bysubject_all <- category_tag_count %>% 
+  filter(tag != "") %>% 
+  head()
+
+
+e <- ggplot(data = bysubject_all, aes(x = reorder(tag, -n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "#f4a8a7") +
+  # coord_flip() +
+  theme_minimal()
+
+e2 <- e + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ee <- ggplotly(e2)
+
+ee_nomenu <- ee %>% config(displayModeBar = FALSE)
+ee_nomenu
+
+
+```
+
+
+### Top code names
+
+```{r}
+
+bycodename <- fcheck %>% 
+  filter(code_name != "") %>% 
+  count(code_name) %>% 
+  ungroup() %>% 
+  head()
+
+
+
+g <- ggplot(data = bycodename, aes(x = reorder(code_name, -n), y = n)) +
+  geom_col(
+    # color = "#848484",
+    fill = "#DA85E8") +
+  # coord_flip() +
+  theme_minimal()
+
+g2 <- g + labs(x ="", y = "") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # scale_fill_manual(values=cbPalette) +
+  theme(legend.title=element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(breaks = function(x) unique(floor(pretty(seq(0, (max(x) + 1) * 1.1)))))
+
+gg <- ggplotly(g2)
+
+gg_nomenu <- gg %>% config(displayModeBar = FALSE)
+gg_nomenu
+
+
+```
+
+
+
+Time-based Rankings
+===================================== 
+
+
+
+Row 
+-----------------------------------------------------------------------
+
+### Daily tallies for `r week_range_string`
+
+```{r}
+
+fcheck_PREVWEEK %>% 
+  count(date) %>% 
+  arrange(date) %>% 
+  mutate(
+    rank = min_rank(desc(n)),
+    date = format(date, "%b %d")      
+    ) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped"))
+
+
+```
+
+
+### Top individual days (all since `r format(min(fcheck$date), "%a %b %d")`)
+
+```{r}
+
+fcheck %>% 
+  count(date) %>% 
+  arrange(desc(n)) %>% 
+  head(5) %>% 
+  mutate(
+    rank = min_rank(desc(n)),
+    date = format(date, "%b %d")      
+    ) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped"))
+
+
+```
+
+
+### Top weeks 
+
+```{r}
+
+fcheck %>% 
+  count(year, isoweek) %>% 
+  arrange(desc(n)) %>% 
+  head(5) %>% 
+  mutate(rank = min_rank(desc(n))) %>% 
+  rename(week = isoweek) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped"))
+
+
+
+```
+
+
+### Top months 
+
+```{r}
+
+fcheck %>% 
+  count(year, month) %>% 
+  arrange(desc(n)) %>% 
+  head(5) %>% 
+  mutate(rank = min_rank(desc(n))) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped"))
+
+
+```
+
+
+Row {data-height=200}
+-----------------------------------------------------------------------
+
+
+### Average claims per day during `r week_range_string`
+
+```{r}
+
+sumforprevweek <- fcheck_PREVWEEK %>% 
+  count(date) %>% 
+  summarise(sum(n)) %>% 
+  pull() 
+
+avg_per_day_prevweek <- round_half_up(sumforprevweek / 7, digits = 1)
+
+valueBox(avg_per_day_prevweek, color = "#9c9293")
+
+
+```
+
+
+### Average claims per day since `r format(min(fcheck$date), "%a %b %d")`
+
+```{r}
+
+# https://data.library.virginia.edu/working-with-dates-and-time-in-r-using-the-lubridate-package/
+# calculate total number of days since first recorded date
+start <- min(fcheck$date)
+end <- today()
+#calculate elapsed time interval
+elapsed.time <- start %--% end
+#calculate duration of days
+totaldays_sincestart <- as.duration(elapsed.time) / ddays(1)
+
+#now we'll sum up the total of false claims per day
+sumdailytotals <- fcheck %>% 
+  count(date) %>% #might not need this step at all anymore
+  summarise(sum(n)) %>% 
+  pull() 
+
+#calculate average
+avg_per_day_all <- round_half_up(sumdailytotals / totaldays_sincestart, digits = 1)
+
+valueBox(avg_per_day_all, color = "#9c9293")
+
+
+```
+
+
+
+### Average claims per week
+
+```{r}
+
+avg_per_week <- fcheck %>% 
+  count(isoweek) %>% 
+  summarise(mean(n)) %>% 
+  pull()%>% 
+  round_half_up(digits = 1)
+
+valueBox(avg_per_week, color = "#9c9293")
+
+```
+
+
+### Average claims per month
+
+```{r}
+
+avg_per_month <- fcheck %>% 
+  count(month) %>% 
+  summarise(mean(n)) %>% 
+  pull() %>% 
+  round_half_up(digits = 1)
+
+valueBox(avg_per_month, color = "#9c9293")
+
+```
+
+
+Row 
+-----------------------------------------------------------------------
+
+### Timeline of daily false claims
+
+```{r}
+
+bydate <- fcheck %>%
+  count(date) 
+
+
+p <- plot_ly(bydate, x = ~date, y = ~n, name = 'claimsperday', type = 'scatter',
+             mode = 'lines+markers', connectgaps = TRUE)
+
+p %>% config(displayModeBar = FALSE)
+
+
+
+
+
+```
+
+### TBD
+
+
+
+
+Forum-based Rankings
+===================================== 
+
+
+
+Row 
+-----------------------------------------------------------------------
+
+### REMARKS with the most false claims
+
+```{r}
+
+fcheck %>% 
+  count(kind_of_forum, date, forum) %>% 
+  filter(kind_of_forum == "REMARKS") %>% 
+  mutate(
+    date = format(date, "%b %d")      
+    ) %>%
+  arrange(kind_of_forum, desc(n)) %>% 
+  head(5) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"))
+
+
+```
+
+
+### INFORMAL REMARKS with the most false claims
+
+```{r}
+
+fcheck %>% 
+  count(kind_of_forum, date, forum) %>% 
+  filter(kind_of_forum == "INFORMAL REMARKS") %>% 
+  mutate(
+    date = format(date, "%b %d")      
+    ) %>%
+  arrange(kind_of_forum, desc(n)) %>% 
+  head(5) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"))
+
+
+```
+
+
+Row 
+-----------------------------------------------------------------------
+
+### SPEECHES with the most false claims
+
+```{r}
+
+fcheck %>% 
+  count(kind_of_forum, date, forum) %>% 
+  filter(kind_of_forum == "SPEECH") %>% 
+  mutate(
+    date = format(date, "%b %d")      
+    ) %>%
+  arrange(kind_of_forum, desc(n)) %>% 
+  head(5) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"))
+
+
+```
+
+
+### RALLY SPEECHES with the most false claims
+
+```{r}
+
+fcheck %>% 
+  count(kind_of_forum, date, forum) %>% 
+  filter(kind_of_forum == "RALLY SPEECH") %>% 
+  mutate(
+    date = format(date, "%b %d")      
+    ) %>%
+  arrange(kind_of_forum, desc(n)) %>% 
+  head(5) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"))
+
+
+```
+
+
+
+Row 
+-----------------------------------------------------------------------
+
+### EXCHANGES WITH REPORTERS with the most false claims
+
+```{r}
+
+fcheck %>% 
+  count(kind_of_forum, date, forum) %>% 
+  filter(kind_of_forum == "EXCHANGE WITH REPORTERS") %>% 
+  mutate(
+    date = format(date, "%b %d")      
+    ) %>%
+  arrange(kind_of_forum, desc(n)) %>% 
+  head(5) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"))
+
+
+```
+
+
+### INTERVIEWS with the most false claims
+
+```{r}
+
+fcheck %>% 
+  count(kind_of_forum, date, forum) %>% 
+  filter(kind_of_forum == "INTERVIEW") %>% 
+  mutate(
+    date = format(date, "%b %d")      
+    ) %>%
+  arrange(kind_of_forum, desc(n)) %>% 
+  head(5) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"))
+
+
+```
+
+
+Row 
+-----------------------------------------------------------------------
+
+### TWEETS with the most false claims
+
+```{r}
+
+fcheck %>% 
+  count(kind_of_forum, date, forum) %>% 
+  filter(kind_of_forum == "TWEET") %>% 
+  mutate(
+    date = format(date, "%b %d")      
+    ) %>%
+  arrange(kind_of_forum, desc(n)) %>% 
+  head(5) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"))
+
+
+```
+
+
+### EVENTS with the most false claims
+
+```{r}
+
+fcheck %>% 
+  count(kind_of_forum, date, forum) %>% 
+  filter(kind_of_forum == "EVENT") %>% 
+  mutate(
+    date = format(date, "%b %d")      
+    ) %>%
+  arrange(kind_of_forum, desc(n)) %>% 
+  head(5) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"))
+
+
+```
+
+
