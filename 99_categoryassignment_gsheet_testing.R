@@ -16,7 +16,7 @@ library(writexl)
 # mykey <- Sys.getenv("DW2020_KEY")
 # dw2020 <- gs_key(mykey)
 
-mykey <- "1jjp6YqMIpf8p8FBANYFx4GGFDvXVqmPVMirXZ78ZRR8"
+mykey <- Sys.getenv("TRUMPCLAIMS_KEY")
 trumpsheet <- gs_key(mykey)
 
 #see worksheets
@@ -34,8 +34,13 @@ fcheck <- falseclaims %>%
 
 names(fcheck)
 
+# filter out missing dates 
+fcheck <- fcheck %>% 
+  filter(!is.na(date))
+
 #set date to date format
-fcheck$date <- mdy(fcheck$date)
+fcheck$date <- mdy(fcheck$date) 
+year(fcheck$date)
 
 #set formatting of certain columns and break out dates into own columns
 fcheck <- fcheck %>%
@@ -44,11 +49,7 @@ fcheck <- fcheck %>%
     location = str_trim(str_to_upper(location)),
     state = str_trim(str_to_upper(state)),
     code_name = str_trim(str_to_upper(code_name)),
-    category_tag1 = str_trim(str_to_upper(category_tag1)),
-    category_tag2 = str_trim(str_to_upper(category_tag2)),
-    category_tag3 = str_trim(str_to_upper(category_tag3)),
-    category_tag4 = str_trim(str_to_upper(category_tag4)),
-    category_tag5 = str_trim(str_to_upper(category_tag5)),
+    category_tags_combined = str_trim(str_to_upper(category_tags_combined)),
     year = year(date),
     month = month(date),
     day = day(date),
@@ -56,9 +57,14 @@ fcheck <- fcheck %>%
     isoweek = isoweek(date) #isoweek starts on MONDAYS
   )
 
-# any dates are missing?
-fcheck %>% 
-  filter(is.na(date))
+
+
+aaa <- fcheck %>% 
+  select(category_tags_combined) %>% 
+  separate_rows(category_tags_combined, sep = ";") %>% 
+  mutate(
+    category_tags_combined = str_trim(category_tags_combined)
+  )
 
 
 
