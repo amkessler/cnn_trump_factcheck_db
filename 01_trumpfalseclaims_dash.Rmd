@@ -391,17 +391,16 @@ Row {data-height=800}
 -----------------------------------------------------------------------
 
 
-### Top daily totals
+### All daily totals
 
 ```{r}
 
 bydate <- fcheck_PREVWEEK %>%
   count(date) %>% 
-  head() %>% 
   ungroup() 
 
 
-d <- ggplot(data = bydate, aes(x = reorder(date, -n), y = n)) +
+d <- ggplot(data = bydate, aes(x = date, y = n)) +
   geom_col(
     # color = "#848484",
     fill = "lightblue") +
