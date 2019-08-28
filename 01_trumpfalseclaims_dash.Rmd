@@ -909,7 +909,15 @@ p %>% config(displayModeBar = FALSE)
 Forum-based Rankings
 ===================================== 
 
+```{r, echo=FALSE}
 
+fcheck <- fcheck %>% 
+  mutate(
+    claim_snippet = paste0(substr(claim, 1, 50), "...")
+  )
+
+
+```
 
 Row 
 -----------------------------------------------------------------------
@@ -933,24 +941,6 @@ fcheck %>%
 ```
 
 
-<!-- ### INFORMAL REMARKS with the most false claims -->
-
-<!-- ```{r} -->
-
-<!-- fcheck %>%  -->
-<!--   count(kind_of_forum, date, forum) %>%  -->
-<!--   filter(kind_of_forum == "INFORMAL REMARKS") %>%  -->
-<!--   mutate( -->
-<!--     date = format(date, "%b %d")       -->
-<!--     ) %>% -->
-<!--   arrange(kind_of_forum, desc(n)) %>%  -->
-<!--   head(5) %>%  -->
-<!--     kable() %>% -->
-<!--     kable_styling(bootstrap_options = c("striped", "condensed")) -->
-
-
-<!-- ``` -->
-
 
 ### SPEECHES with the most false claims
 
@@ -970,24 +960,8 @@ fcheck %>%
 
 ```
 
-
-<!-- ### RALLY SPEECHES with the most false claims -->
-
-<!-- ```{r} -->
-
-<!-- fcheck %>%  -->
-<!--   count(kind_of_forum, date, forum) %>%  -->
-<!--   filter(kind_of_forum == "RALLY SPEECH") %>%  -->
-<!--   mutate( -->
-<!--     date = format(date, "%b %d")       -->
-<!--     ) %>% -->
-<!--   arrange(kind_of_forum, desc(n)) %>%  -->
-<!--   head(5) %>%  -->
-<!--     kable() %>% -->
-<!--     kable_styling(bootstrap_options = c("striped", "condensed")) -->
-
-
-<!-- ``` -->
+Row
+-----------------------------------------------------------------------
 
 
 ### EXCHANGES WITH REPORTERS with the most false claims
@@ -1009,8 +983,7 @@ fcheck %>%
 ```
 
 
-Row
------------------------------------------------------------------------
+
 
 ### INTERVIEWS with the most false claims
 
@@ -1037,7 +1010,7 @@ fcheck %>%
 <!-- ```{r} -->
 
 <!-- fcheck %>%  -->
-<!--   count(kind_of_forum, date, forum, claim) %>%  -->
+<!--   count(kind_of_forum, date, forum) %>%  -->
 <!--   filter(kind_of_forum == "TWEET") %>%  -->
 <!--   mutate( -->
 <!--     date = format(date, "%b %d")       -->
@@ -1050,23 +1023,5 @@ fcheck %>%
 
 <!-- ``` -->
 
-
-<!-- ### EVENTS with the most false claims -->
-
-<!-- ```{r} -->
-
-<!-- fcheck %>%  -->
-<!--   count(kind_of_forum, date, forum) %>%  -->
-<!--   filter(kind_of_forum == "EVENT") %>%  -->
-<!--   mutate( -->
-<!--     date = format(date, "%b %d")       -->
-<!--     ) %>% -->
-<!--   arrange(kind_of_forum, desc(n)) %>%  -->
-<!--   head(5) %>%  -->
-<!--     kable() %>% -->
-<!--     kable_styling(bootstrap_options = c("striped", "condensed")) -->
-
-
-<!-- ``` -->
 
 
