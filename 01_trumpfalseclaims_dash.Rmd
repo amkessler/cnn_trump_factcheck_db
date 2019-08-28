@@ -391,7 +391,7 @@ Row {data-height=800}
 -----------------------------------------------------------------------
 
 
-### All daily totals
+### Daily totals this week
 
 ```{r}
 
