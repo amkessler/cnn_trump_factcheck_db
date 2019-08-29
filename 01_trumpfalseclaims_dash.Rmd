@@ -70,7 +70,8 @@ fcheck <- fcheck %>%
     month = month(date),
     day = day(date),
     day_of_week = weekdays(date, abbreviate = T),
-    isoweek = isoweek(date) #isoweek starts on MONDAYS
+    isoweek = isoweek(date), #isoweek starts on MONDAYS
+    isoweek_floor_date = floor_date(date, "week", week_start = getOption("lubridate.week.start", 1))
   )
 
 # fcheck <- readRDS("saved_versions/fcheck_saved.rds")
@@ -132,8 +133,6 @@ monday_formatted <- format(monday_before_recent_sunday, "%a %b %d")
 sunday_formatted <- format(most_recent_sunday, "%a %b %d")
 
 week_range_string <- glue("week of {monday_formatted} to {sunday_formatted}")
-
-
 
 
 # COUNTS #### ---------------------------------------------------------------------
@@ -770,11 +769,12 @@ fcheck %>%
 ```{r}
 
 fcheck %>% 
-  count(year, isoweek) %>% 
+  count(year, isoweek_floor_date) %>% 
   arrange(desc(n)) %>% 
   head(5) %>% 
-  mutate(rank = min_rank(desc(n))) %>% 
-  rename(week = isoweek) %>% 
+  mutate(rank = min_rank(desc(n)),
+         week_starting_on = format(isoweek_floor_date, "%a %b %d")) %>% 
+  select(year, week_starting_on, n) %>% 
     kable() %>%
     kable_styling(bootstrap_options = c("striped"))
 
