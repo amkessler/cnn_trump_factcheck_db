@@ -19,16 +19,18 @@ library(kableExtra)
 library(readxl)
 library(writexl)
 
-raw_data <- read_excel("TRUMP FACT-CHECKS.xlsx", 
-    sheet = "ak_forstorytest", col_types = c("date", 
-        "text", "text", "text", "text", "text", 
-        "text", "text", "text", "text", "text", 
-        "text", "text", "numeric", "text"))
+# import data from Google Sheet 
+mykey <- Sys.getenv("TRUMPCLAIMS_KEY")
+trumpsheet <- gs_key(mykey)
 
-glimpse(raw_data)
+#read in data from the trump false claims tab
+falseclaims <- trumpsheet %>% 
+  gs_read(ws = "falseclaims") 
+
+glimpse(falseclaims)
 
 #clean column names
-fcheck <- raw_data %>%
+fcheck <- falseclaims %>%
   clean_names()
 
 names(fcheck)
