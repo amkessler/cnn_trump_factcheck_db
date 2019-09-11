@@ -495,6 +495,7 @@ ee_nomenu
 bycodename <- fcheck_PREVWEEK %>% 
   filter(code_name != "") %>% 
   count(code_name) %>% 
+  arrange(desc(n)) %>% 
   ungroup() %>% 
   head()
 
@@ -690,6 +691,7 @@ ee_nomenu
 bycodename <- fcheck %>% 
   filter(code_name != "") %>% 
   count(code_name) %>% 
+  arrange(desc(n)) %>% 
   ungroup() %>% 
   head()
 
