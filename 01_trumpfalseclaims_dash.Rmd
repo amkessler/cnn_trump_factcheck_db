@@ -771,10 +771,10 @@ fcheck %>%
 fcheck %>% 
   count(year, isoweek_floor_date) %>% 
   arrange(desc(n)) %>% 
-  head(5) %>% 
+  # head(5) %>% 
   mutate(rank = min_rank(desc(n)),
          week_starting_on = format(isoweek_floor_date, "%a %b %d")) %>% 
-  select(year, week_starting_on, n) %>% 
+  select(year, week_starting_on, n, rank) %>% 
     kable() %>%
     kable_styling(bootstrap_options = c("striped"))
 
@@ -790,7 +790,7 @@ fcheck %>%
 fcheck %>% 
   count(year, month) %>% 
   arrange(desc(n)) %>% 
-  head(5) %>% 
+  # head(5) %>% 
   mutate(rank = min_rank(desc(n))) %>% 
     kable() %>%
     kable_styling(bootstrap_options = c("striped"))
