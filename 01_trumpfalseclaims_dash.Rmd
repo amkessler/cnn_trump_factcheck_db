@@ -432,7 +432,7 @@ byforum <- fcheck_PREVWEEK %>%
   count(forum) %>%
   arrange(desc(n)) %>%
   head() %>%
-  ungroup()
+  ungroup() 
 
 
 e <- ggplot(data = byforum, aes(x = reorder(forum, -n), y = n)) +
