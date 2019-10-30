@@ -1006,6 +1006,24 @@ fcheck %>%
 ```
 
 
+### RALLIES with the most false claims
+
+```{r}
+
+fcheck %>% 
+  count(kind_of_forum, date, forum) %>% 
+  filter(kind_of_forum == "RALLY") %>% 
+  mutate(
+    date = format(date, "%b %d")      
+    ) %>%
+  arrange(kind_of_forum, desc(n)) %>% 
+  head(5) %>% 
+    kable() %>%
+    kable_styling(bootstrap_options = c("striped", "condensed"))
+
+
+```
+
 
 
 
